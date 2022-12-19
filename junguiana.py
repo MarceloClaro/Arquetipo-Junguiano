@@ -150,7 +150,7 @@ if image is not None: # se imagem for diferente de nulo
     st.write('FONTE:  https://pteromys.melonisland.net/munsell/') # imprime no console
     st.write('') # imprime no console
 
-    st.subheader('Arquétipos Junguiano - Legenda de 45 cores ') # define subtítulo para a seção FONTE 14
+st.subheader('Arquétipos Junguiano - Legenda de 45 cores ') # define subtítulo para a seção FONTE 14
 st.write('1. Vermelho Vivo — Anima/Anímico: Vitalidade; Sombra: Impulsividade; Personalidade: Autocontrole.')
 st.write('2. Rosa Brilhante — Anima/Anímico: Abundância; Sombra: Propensão ao Excesso; Personalidade: Equilíbrio.') 
 st.write('3. Laranja Ardente — Anima/Anímico: Entusiasmo; Sombra: Imaturidade; Personalidade: Sabedoria. ')

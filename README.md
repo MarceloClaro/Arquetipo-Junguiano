@@ -1,43 +1,70 @@
 # Arquetipo-Junguiano
 1 INTRODUÇÃO
+---
+
 A pandemia da Covid-19 trouxe consigo diversos desafios para os sistemas educacionais, como os alunos estão se adaptando às mudanças e os problemas cognitivos que surgiram após a quarentena. Diversas técnicas terapêuticas e planos de educação foram criados para auxiliar os estudantes e as professoras a lidarem com essas alterações e tomarem decisões.
 Uma das técnicas terapêuticas é a influência da teoria da psique junguiana. Jung acreditava que a arte, particularmente a pintura, poderia ter um grande efeito na saúde mental de uma pessoa. A metodologia criativa de Jung possibilita que os alunos explorem as suas próprias emoções e sentimentos, e assim alcancem um maior autoconhecimento.
 Outra influência relevante para o nosso projeto é a obra do geógrafo Humboldt, particularmente suas pinturas. O gênio alemão era conhecido por suas aquarelas que representavam paisagens, animais e plantas que ele encontrou em suas viagens pela América do Sul. Essas pinturas tinham como objetivo educar, mostrando a beleza, as formas da natureza e a visão de um mundo antigo.
 Com base nessas influências, propomos a criação de um clube de pintura em tela nas escolas, visando ajudar os alunos a lidarem com seus problemas cognitivos que surgiram devido à pandemia.
+
 2 DESCRIÇÃO DO PROJETO
+---
 O projeto de clube de pintura em tela nas escolas será semelhante a outros clubes já existentes na escola. Os alunos se encontrarão uma vez por semana para pintar quadros, em um espaço artístico supervisionado pela professora. 
 O clube tem como objetivo auxiliar os alunos a serem criativos e a expressarem seus sentimentos e emoções. Isso será feito aplicando os princípios junguianos, assim como criando um ambiente que estimule a criatividade e o questionamento. As aulas serão baseadas na pintura em tela, usando as pinturas do geógrafo Alexander Von Humboldt como inspiração. Além disso, serão aplicadas aulas teóricas básicas de pintura, para que os alunos compreendam o contexto de suas pinturas. 
 O clube de pintura será dividido em 3 níveis diferentes, conforme a idade, para ser feita um planejamento didático antecipado, mas a validação de pertencimento ao nível, dependendo da habilidade dos alunos. Cada série terá uma metodologia de ensino diferente, seguindo a proposta de aprendizado baseada na Teoria Junguiana. Todos os alunos terão seu próprio kit de pintura, contendo tudo o que precisam para a realização das mesmas. Os professores vão aplicar técnicas cognitivas, fundamentadas na Teoria Junguiana, para explorar o inconsciente e desenvolver o potencial criativo dos alunos.
 O projeto de pintura em tela será composto por sessões de terapia em grupo. A cada encontro, o líder guiará o grupo por meio de conversas fundamentadas nos arquétipos junguianos — sombra, personalidade, anima/anímico — e sua relação com a experiência do participante. Os alunos terão acesso a materiais de pintura, como tintas, pincéis, papel e telas, para poderem expressar criativamente suas ideias e sentimentos para os colegas.
+
 3 OS ARQUÉTIPOS JUNGUIANOS
+---
+
 Os arquétipos junguianos são instrumentos de autoconhecimento que nos ajudam a compreender o que motiva nossas emoções, ações e atitudes. Nessa discussão, nos concentraremos em três arquétipos junguianos: a Sombra, a Personalidade e a Anima/Anímico. Investigaremos como esses arquétipos se apresentam em nossos processos de pintura de paisagens, bem como expressamos nossas emoções e comportamentos através deles.
 O  arquétipo da  Sombra representa os aspectos inconscientes da psique de uma pessoa. O inconsciente é composto pelos sentimentos, pensamentos e outras características que foram reprimidos e não são aceitos pela consciência da pessoa. Esses conteúdos ocultos são percebidos como indesejáveis e podem ser prejudiciais para o equilíbrio emocional. A Sombra pode ter um impacto negativo na inteligência emocional de uma pessoa, pois as emoções que são reprimidas podem causar ansiedade, depressão e outros problemas psicológicos.
 A personalidade é como a pessoa se apresenta para o mundo. A forma como pensa, age e se relaciona com as outras pessoas indicam o seu caráter, tem uma grande influência na sua inteligência emocional, pois determina como ela processa, interpreta e reage às suas emoções, dá forma às habilidades de autoconsciência, automonitoramento e automotivação, fundamentais para um bom desempenho da inteligência emocional.
 O arquétipo Anima/Anímico representa as qualidades femininas e masculinas presentes em cada um. São os desejos, fantasias e sentimentos íntimos de cada um que lidam com o lado particular. Esse modelo influencia diretamente na inteligência emocional de cada pessoa, pois auxilia a compreender melhor a si mesmo e as emoções que estão sendo experimentadas. Ao compreendermos de forma mais acurada as nossas emoções e sentimentos, podemos desenvolver técnicas de autocontrole e autorregulação mais eficientes, fundamentais para uma boa inteligência emocional.
+
 3.1 SOMBRA EM TELA
+
 A Sombra arquetípica é aquela parte do nosso inconsciente que não queremos acessar. Podendo se manifestar de diversas formas nas nossas pinturas de paisagens. Um estudante, por exemplo, queria abordar algumas qualidades mais tenebrosas da paisagem, como a escuridão, a violência ou a tristeza, mas temeu enfrentar essas facetas mais sombrias da sua personalidade. Nesse debate, o aluno pode questionar e discutir como seu Arquétipo de Sombra está interferindo na sua arte e como ele pode superar essa barreira para que sua pintura reflita seus sentimentos mais verdadeiros. 
 3.2 PERSONALIDADE EM TELA 
 A Personalidade arquétipo é aquela parte do nosso inconsciente que aprendemos a projetar e expressar, mostrando ao mundo como queremos que as pessoas nos vejam. É a imagem “perfeita” que desejamos que as outras pessoas vejam em nós quando nos olharem. A personalidade arquetípica pode ser demonstrada ao pintar paisagens de diversas formas. Por exemplo, talvez durante o processo de pintura, um aluno quisesse pintar uma paisagem para se adequar ao que ele consideraria “perfeita” ou “bonita”, se esquecendo do que ele realmente sentia a respeito daquele lugar ou daquela luz. Nesse debate, o aluno pode apresentar esse ponto e discutir como o seu Arquétipo de Personalidade está interferindo na sua arte e como ele pode superar essa dificuldade para que a sua pintura retrate os seus sentimentos, em vez dos sentimentos que ele imagina que os outros esperam dele.
+
 3.3 ANIMA/ANÍMICO EM TELA
+
 O anima/anímico arquetípico é a parte do nosso inconsciente que está diretamente ligada ao nosso espírito feminino ou masculino. É uma parte que está intimamente ligada ao nosso ser e à nossa essência, que surge durante o processo criativo. A Anima/Anímico arquetípico pode ser manifestado através da pintura de paisagens de maneiras diferentes. 
 Por exemplo, talvez durante o processo de pintura, um aluno quisesse retratar aquilo que lhe trouxesse a maior sensação de satisfação e felicidade, mas que percebesse que essa abordagem não seria adequada para os outros. Nesse debate, o estudante poderá apresentar esse tema e discutir como o seu Arquétipo Anima/Anímico está interferindo na sua arte e como superar essa dificuldade para que a sua pintura retrate o seu verdadeiro “Eu”.
 A professora também será essencial para supervisionar as sessões de pintura. Devem fornecer diretrizes aos alunos à medida que estes desenvolvem suas aptidões criativas e incentivem o debate acerca da relevância da arte na vida. Além disso, os alunos também terão a oportunidade de debater como a pandemia afetou suas vidas e como isso pode ser usado para inspirar a criação de suas pinturas. Os alunos serão incentivados a divulgar seus trabalhos com os colegas, permitindo que se conectem e troquem experiências.
+
 4 PRODUÇÃO ARTÍSTICA FUNDAMENTADA EM ESTUDOS DE TEMÁTICAS
+---
+
 As artes plásticas fundamentam-se em projetos de estudos temáticos para tornar a criação artística mais intencional. Quando um artista tem um tema ou ideia definida desde o início, ele pode se concentrar na criação de obras que reflitam esse tema, guiando-o através do processo criativo. 
 Enquanto a espontaneidade criativa não permite ao artista explorar as possibilidades detalhadamente, os projetos temáticos permitem que ele as examine para expressar seu tema da melhor forma possível. Isto é uma forma de organizar processos criativos de maneira sistemática, permitindo que o artista explore sua criatividade e alcance o resultado pretendido.
 “The Last Judgment” (O Juízo Final), do artista renascentista Michelangelo, é um exemplo de uma pintura que segue um tema. Michelangelo trabalhou por anos nesta grande obra, cujo tema foi o julgamento final do Apocalipse, para expressar fielmente esta cena bíblica. “As Meninas de Avioneta”, de Pablo Picasso, é outro exemplo. Esse trabalho tem como tema a exploração do significado e valor cultural das mulheres modernas, e isso é demonstrado na complexa composição e na abordagem ousada de Picasso para retratá-las.
 Podemos citar o célebre pintor holandês, Rembrandt Van Rijn. Seu trabalho foi inspirado em um projeto de estudo temático de autorretratos. Ele pintou centenas de autorretratos entre 1629 e 1669, dentre eles “Autorretrato com Barba ao Estilo de São Paulo”, “Autorretrato com a Gorra da Cavalaria” e “Autorretrato com Touca”. Estes autorretratos mostram o desenvolvimento de Rembrandt enquanto pintor e artista. Ele usou os retratos para experimentar técnicas e expressar sentimentos.
 Outro exemplo de trabalhos que foram temáticos são as pinturas do “Barracos” de Ivan Serpa, um conjunto de pinturas criadas no início dos anos 1960 que mostravam as favelas nas bordas do Rio de Janeiro. A obra de Serpa tinha como objetivo explorar e registrar as duras condições de pobreza que muitas pessoas passavam nas áreas que ele visitava.
+
 5 OBJETIVO GERAL 
+---
+
 O objetivo é que o aluno aprenda e perceba as paisagens geográficas, estimulando o seu talento para pintar em telas, como forma de educação.
+
 6 OBJETIVOS ESPECÍFICOS 
+
+---
+
 • Reconhecer a relevância de aprender técnicas de pintura e como elas podem ser aplicadas à arte. 
 • Aperfeiçoar as aptidões de interpretação e análise de paisagens geográficas. 
 • Identificar os elementos da arte nas pinturas de paisagens geográficas; 
 • Apreciar a importância da arte para a formação da identidade cultural e social.
+
 7 METODOLOGIA 
+---
+
 A metodologia do projeto será fundamentada na teoria da Psicologia Analítica de Jung, que lida com a consciência e inconsciência. Nesse contexto, os alunos serão convidados a desenvolver novas habilidades de reflexão para compor seus próprios trabalhos de arte conforme o tema proposto. A disciplina de linguagem será útil para interpretar essas paisagens geográficas e construir narrativas para as obras. 
+
 8 METAS GERAIS DO PROJETO
+---
+
 As seis metas a serem alcançadas para este projeto são as seguintes:
 1. Desenvolver nos estudantes a capacidade de entender a relevância da pintura para o autoconhecimento.
 2. Proporcionar aos alunos um espaço estimulante e motivador para poderem expressar a sua criatividade.
@@ -45,7 +72,10 @@ As seis metas a serem alcançadas para este projeto são as seguintes:
 4. Oferecer aos alunos a oportunidade de explorar suas individualidades e consciência coletiva, através da arte da pintura.
 5. Aperfeiçoar as capacidades mentais e intelectuais dos educandos mediante a investigação do inconsciente.
 6. Incentivar os alunos a se esforçarem para serem excelentes pintores.
+
 9 ATIVIDADES: 
+---
+
 • Atividades de busca de técnicas e materiais para a produção artística. 
 • Atividades teóricas envolvendo paisagens geográficas e a importância da arte para a identidade cultural e social. 
 • Oficinas de pintura em telas de paisagens geográficas. 
@@ -60,12 +90,16 @@ O projeto educacional espera-se que:
 • Aperfeiçoamento de competências introspetivas. 
 • Maior compreensão dos elementos envolvidos na produção artística. 
 • A arte é importante para a construção de identidades culturais.
+
 11 AVALIAÇÃO DOS ARQUÉTIPOS NAS PINTURAS EM TELA
+---
 A avaliação dos arquétipos será feita a partir da identificação da cor dominante, relacione-a à legenda para interpretar os arquétipos na pintura e debate a obra e as emoções expressas na mesma e do autor. Os arquétipos extraídos serão: Anima/Anímico, Sombra e Personalidade.
 11.1 MÉTODO
 Para avaliar os arquétipos Anima/Anímico, Sombra e Personalidade, é necessário selecionar uma pintura que contenha uma variedade de cores. Dessa forma, deve-se identificar a cor predominante da pintura, usando o aplicativo web, no qual foi enviada a imagem da obra capturada pelo smartphone. A seguir, observe a legenda de cores disponível, que contém características específicas para cada cor.
  Em seguida, interprete o aluno detalhadamente a partir da cor dominante da pintura. Essas interpretações diferirão dependendo dos arquétipos, como os descritos acima. Por exemplo, se a cor principal da pintura for cinza, então o Anima/Anímico pode ser interpretado como conhecimento, o Sombra pode ser interpretado como falta de foco e a Personalidade como concentração. Sendo assim, este critério de análise oferece uma compreensão mais detalhada do aluno, fundamentada na cor majoritária da pintura.
+ 
 11.2 LEGENDA DE CORES E ARQUÉTIPOS:
+----
 1. Vermelho Vivo — Anima/Anímico: Vitalidade; Sombra: Impulsividade; Personalidade: Autocontrole. 
 2. Rosa Brilhante — Anima/Anímico: Abundância; Sombra: Propensão ao Excesso; Personalidade: Equilíbrio. 
 3. Laranja Ardente — Anima/Anímico: Entusiasmo; Sombra: Imaturidade; Personalidade: Sabedoria. 
@@ -113,6 +147,8 @@ Para avaliar os arquétipos Anima/Anímico, Sombra e Personalidade, é necessár
 45. Verde Musgo — Anima/Anímico: Natureza; Sombra: Desapego Excessivo; Personalidade: Comprometimento.
 
 11.2 INTERPRETAÇÃO DOS ARQUÉTIPOS DAS CORES DOMINANTES:
+---
+
 1. Vermelho Vivo — Anima/Anímico: Vitalidade; Sombra: Impulsividade; Personalidade: Autocontrole. Esse paciente precisa trabalhar sua impulsividade para alcançar seu objetivo de ter melhor autocontrole. O paciente deve encontrar maneiras de aumentar sua consciência e canalizar sua energia e vitalidade de forma positiva.
 
 2. Rosa Brilhante — Anima/Anímico: Abundância; Sombra: Propensão ao Excesso; Personalidade: Equilíbrio. Esse paciente precisa trabalhar em sua tendência ao excesso para se alinhar com a personalidade de equilíbrio que eles desejam alcançar. O paciente deve aprender a encontrar o meio-termo entre a abundância e o excesso.
@@ -201,8 +237,3 @@ Para avaliar os arquétipos Anima/Anímico, Sombra e Personalidade, é necessár
 44. Azul Sereno — As principais características desse arquétipo são Calma, Sensibilidade e Indiferença. Esse paciente precisa trabalhar sua indiferença para alcançar a sensibilidade. Eles devem usar sua calma para aprender maneiras de ligar-se aos outros e ao ambiente, a fim de desenvolver um senso de profunda consciência e compaixão.
 
 45. Verde Musgo — As principais características desse arquétipo são Natureza, Comprometimento e Desapego Excessivo. Esse paciente precisa trabalhar seu desapego excessivo para alcançar o comprometimento. Eles devem usar sua natureza para descobrir maneiras de permanecer conectado aos outros e ao mundo, a fim de desenvolver um senso de lealdade e responsabilidade.
-12 CRONOGRAMA E PLANO DE ATIVIDADES:
-12.1 CONTEXTO HISTÓRICO DAS ARTES COMO PONTO DE PARTIDA.
-A história das artes trata do desenvolvimento dos movimentos artísticos ao longo dos anos. Ela analisa temas como a natureza e o início da arte, os significados e as intenções por trás das obras de arte, e como os artistas as transformaram e influenciaram a cultura. A história da arte reflete as influências culturais, religiosas e sociais de cada período. Além disso, a história das artes explora os elementos universais presentes nas obras artísticas, como a dualidade entre a Anima/Anímico (o consciente e o inconsciente), a figura da sombra e a personalidade. Essa visão panorâmica dá aos artistas o conhecimento de como a arte foi utilizada ao longo dos séculos, assim como ela ainda nos influenciam e nos conectam ao mundo. Ao nos situarmos nas ciências humanas, as temáticas de produção do clube de pintura nos permitem elaborar as seguintes atividades de mentorias:
-12.2 CONTEXTO GEOGRÁFICO:
-Ao longo dos três meses, diferentes grupos de alunos foram convidados a explorar os elementos da natureza, das grandes cidades e da cultura local. O tema destacou como os elementos geográficos influenciam nossa forma de pensar sobre nós mesmos, nossa identidade e nosso desenvolvimento pessoal. Por meio da pintura, cada grupo foi estimulado a refletir sobre como esses elementos geográficos nos ajudam a compreender o mundo e a nos relacionar com o Arquétipo da Anima/Anímico, Sombra e Personalidade.

@@ -390,7 +390,7 @@ if imagem is not None:
 st.title("Análise de Pintura")
 
 # Template do texto
-texto_template = f"""Tema: "{tema}"
+texto_template = """Tema: "{tema}"
 
 OBRA: "{nome_obra}"
 

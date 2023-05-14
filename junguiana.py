@@ -394,7 +394,7 @@ if imagem is not None:
     nome_obra = st.text_input("Nome da Obra")
     tecnica = st.text_input("Técnica Utilizada")
     dimensoes = st.text_input("Dimensões da Tela")
-    idade = st.number_input("Idade do Artista")
+    idade = st.number_input("Idade do Artista", min_value=0, max_value=100)
     artista_referencia = st.text_input("Artista de Referência")
     estilo_artistico = st.text_input("Estilo Artístico")
     elemento_retratado = st.text_input("Elemento Retratado")

@@ -348,7 +348,6 @@ cores_junguianas = {
 # Configurações do aplicativo Streamlit
 st.image("clube.png")  # Adiciona a imagem no topo do app
 st.title("Análise de Cor Dominante das Pinturas de Telas")
-st.write("Carregue uma imagem e descubra a cor dominante e sua correspondência no dicionário de cores junguianas.")
 st.write("""
 Este aplicativo é uma ferramenta extremamente valiosa para o clube de artes plásticas e seus alunos. Através da análise de cor dominante em pinturas, os estudantes podem aprofundar seu entendimento sobre a influência das cores na expressão artística e como elas podem ser usadas para transmitir emoções e mensagens específicas. Além disso, a correspondência das cores com o dicionário de cores junguianas permite uma exploração mais profunda dos aspectos psicológicos das cores na arte.
 
@@ -358,6 +357,7 @@ Além disso, este aplicativo pode ser uma ferramenta educacional útil. Os profe
 
 Em resumo, este aplicativo pode enriquecer o processo de aprendizagem dos alunos, permitindo que eles explorem a complexa relação entre cores e emoções na arte de pintar. Também pode ser uma valiosa ferramenta de auto-reflexão, permitindo que os artistas entendam melhor suas próprias escolhas criativas e como elas afetam o impacto de suas obras.
 """)
+st.write("Carregue uma imagem e descubra a cor dominante e sua correspondência no dicionário de cores junguianas.")
 # Carregar a imagem
 imagem = st.file_uploader("Selecione uma imagem", type=['jpg', 'jpeg', 'png'])
 

@@ -1,11 +1,25 @@
 import streamlit as st
-import cv2
 import numpy as np
-from sklearn.metrics.pairwise import euclidean_distances
 from PIL import Image
+from sklearn.cluster import KMeans
+from scipy.spatial import distance
 
-# Dicionário de cores
-cores = {
+# Função para encontrar a cor mais próxima no dicionário
+def encontrar_cor_mais_proxima(rgb):
+    cor_mais_proxima = None
+    menor_distancia = float('inf')
+
+    for chave, valor in cores_junguianas.items():
+        distancia_cor = distance.euclidean(rgb, valor['rgb'])
+        if distancia_cor < menor_distancia:
+            menor_distancia = distancia_cor
+            cor_mais_proxima = valor
+
+    return cor_mais_proxima
+
+# Carregar o dicionário com as cores junguianas
+
+cores_junguianas = {
     '1': {
         'cor': 'Vermelho Vivo',
         'rgb': (255, 0, 0),
@@ -329,85 +343,43 @@ cores = {
 }
 
 
-
-# Função para encontrar a cor mais próxima
-def encontrar_cor_proxima(rgb):
-    cor_proxima = None
-    menor_distancia = float('inf')
-    for chave, valor in cores.items():
-        distancia_cor = distance.euclidean(rgb, valor['rgb'])
-        if distancia_cor < menor_distancia:
-            menor_distancia = distancia_cor
-            cor_proxima = valor
-    return cor_proxima
-
-# Configurações do Streamlit
-st.title("Análise de Cores em Imagens")
-st.subheader("Carregue uma imagem e veja a cor dominante e a cor mais próxima das cores do dicionário")
+# Configurações do aplicativo Streamlit
+st.title("Análise de Cor Dominante")
+st.write("Carregue uma imagem e descubra a cor dominante e sua correspondência no dicionário de cores junguianas.")
 
 # Carregar a imagem
-imagem = st.file_uploader("Selecione uma imagem", type=['png', 'jpg', 'jpeg'])
+imagem = st.file_uploader("Selecione uma imagem", type=['jpg', 'jpeg', 'png'])
 
 if imagem is not None:
     # Exibir a imagem carregada
-    img = Image.open(imagem)
-    st.image(img, caption='Imagem carregada', use_column_width=True)
+    imagem_pil = Image.open(imagem)
+    st.image(imagem_pil, caption="Imagem Original", use_column_width=True)
 
-    # Converter a imagem para matriz numpy
-    img_array = np.array(img)
+    # Converter a imagem para um array numpy
+    imagem_array = np.array(imagem_pil)
 
-    # Encontrar a cor dominante
-    cor_dominante = tuple(np.mean(img_array, axis=(0, 1)).astype(int))
+    # Redimensionar a imagem para 100x100 pixels
+    imagem_redimensionada = np.array(imagem_pil.resize((100, 100)))
 
-    # Encontrar a cor mais próxima
-    cor_proxima = encontrar_cor_proxima(cor_dominante)
+    # Obter os pixels da imagem redimensionada
+    pixels = imagem_redimensionada.reshape(-1, 3)
 
-    # Exibir informações sobre as cores
-    st.subheader("Análise de Cores:")
-    st.write("Cor Dominante: RGB", cor_dominante)
-    st.write("Cor Mais Próxima do Dicionário:")
-    st.write(" - Cor:", cor_proxima['cor'])
-    st.write(" - Anima/Anímico:", cor_proxima['anima_animico'])
-    st.write(" - Sombra:", cor_proxima['sombra'])
-    st.write(" - Personalidade:", cor_proxima['personalidade'])
-
-# Função para encontrar a cor mais próxima
-def encontrar_cor_proxima(rgb):
-    cor_proxima = None
-    menor_distancia = float('inf')
-    for chave, valor in cores.items():
-        distancia_cor = distance.euclidean(rgb, valor['rgb'])
-        if distancia_cor < menor_distancia:
-            menor_distancia = distancia_cor
-            cor_proxima = valor
-    return cor_proxima
-
-# Configurações do Streamlit
-st.title("Análise de Cores em Imagens")
-st.subheader("Carregue uma imagem e veja a cor dominante e a cor mais próxima das cores do dicionário")
-
-# Carregar a imagem
-imagem = st.file_uploader("Selecione uma imagem", type=['png', 'jpg', 'jpeg'])
-
-if imagem is not None:
-    # Exibir a imagem carregada
-    img = Image.open(imagem)
-    st.image(img, caption='Imagem carregada', use_column_width=True)
-
-    # Converter a imagem para matriz numpy
-    img_array = np.array(img)
+    # Realizar a clusterização dos pixels
+    kmeans = KMeans(n_clusters=5)
+    kmeans.fit(pixels)
 
     # Encontrar a cor dominante
-    cor_dominante = tuple(np.mean(img_array, axis=(0, 1)).astype(int))
+    cor_dominante = kmeans.cluster_centers_[kmeans.labels_].mean(axis=0).astype(int)
 
-    # Encontrar a cor mais próxima
-    cor_proxima = encontrar_cor_proxima(cor_dominante)
+    # Encontrar a cor mais próxima no dicionário
+    cor_proxima = encontrar_cor_mais_proxima(cor_dominante)
 
-    # Exibir informações sobre as cores
-    st.subheader("Análise de Cores:")
-    st.write("Cor Dominante: RGB", cor_dominante)
-    st.write("Cor Mais Próxima do Dicionário:")
-    st.write(" - Cor:", cor_proxima['cor'])
-    st.write(" - Anima/Anímico:", cor_proxima['anima_animico'])
-    st.write(" - Sombra:", cor_proxima['sombra'])
-    st.write(" - Personalidade:", cor_proxima['personalidade'])
+    # Exibir a cor dominante e sua correspondência no dicionário
+    st.subheader("Resultado")
+    st.write(f"Cor Dominante: RGB {cor_dominante}")
+    st.write(f"Cor Correspondente no Dicionário: {cor_proxima['cor']}")
+
+    # Exibir a imagem segmentada do cluster
+    imagem_segmentada = cor_dominante.reshape(1, 1, 3)
+    st.image(imagem_segmentada, caption="Imagem Segmentada do Cluster", use_column_width=True)
+

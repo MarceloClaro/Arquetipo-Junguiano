@@ -373,11 +373,16 @@ if imagem is not None:
 
     # Encontrar a cor mais próxima no dicionário
     cor_proxima = encontrar_cor_mais_proxima(cor_dominante)
-
     # Exibir a cor dominante e sua correspondência no dicionário
     st.subheader("Resultado")
     st.write(f"Cor Dominante: RGB {cor_dominante}")
     st.write(f"Cor Correspondente no Dicionário: {cor_proxima['cor']}")
+    st.write(f"Anima/Animico: {cor_proxima['anima_animico']}")
+    st.write(f"Sombra: {cor_proxima['sombra']}")
+    st.write(f"Personalidade: {cor_proxima['personalidade']}")
+    st.write(f"Diagnóstico: {cor_proxima['diagnostico']}")    
+
+
 
     # Exibir a imagem segmentada do cluster
     imagem_segmentada = cor_dominante.reshape(1, 1, 3)

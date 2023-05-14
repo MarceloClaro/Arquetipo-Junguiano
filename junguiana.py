@@ -385,6 +385,59 @@ if imagem is not None:
     imagem_segmentada = cor_dominante.reshape(1, 1, 3)
     st.image(imagem_segmentada, caption="Imagem Segmentada do Cluster", use_column_width=True)
 
+# Continuação do código...
+
+# Variáveis do usuário
+tema = st.text_input("Tema da Pintura")
+nome_obra = st.text_input("Nome da Obra")
+tecnica = st.text_input("Técnica Utilizada")
+dimensoes = st.text_input("Dimensões da Tela")
+idade = st.number_input("Idade do Artista")
+artista_referencia = st.text_input("Artista de Referência")
+estilo_artistico = st.text_input("Estilo Artístico")
+elemento_retratado = st.text_input("Elemento Retratado")
+descricao_figura = st.text_input("Descrição da Figura")
+genero_figura = st.text_input("Gênero da Figura")
+descricao_ambiente = st.text_input("Descrição do Ambiente")
+cor_dominante = cor_proxima["cor"]
+descricao_tecnicas = st.text_input("Descrição das Técnicas Utilizadas")
+arquetipo_junguiano = cor_proxima["anima_animico"]
+sombra = cor_proxima["sombra"]
+local_sombra = st.text_input("Local da Sombra")
+interpretacao_sombra = st.text_input("Interpretação da Sombra")
+cor_correspondente_sombra = cor_proxima["cor"]
+local_personalidade = st.text_input("Local da Personalidade")
+interpretacao_personalidade = st.text_input("Interpretação da Personalidade")
+contexto_relevante = st.text_input("Contexto Relevante")
+
+# Preenchendo o template com as variáveis do usuário
+texto_final = texto_template.format(
+    tema=tema,
+    nome_obra=nome_obra,
+    tecnica=tecnica,
+    dimensoes=dimensoes,
+    idade=idade,
+    artista_referencia=artista_referencia,
+    estilo_artistico=estilo_artistico,
+    elemento_retratado=elemento_retratado,
+    descricao_figura=descricao_figura,
+    genero_figura=genero_figura,
+    descricao_ambiente=descricao_ambiente,
+    cor_dominante=cor_dominante,
+    descricao_tecnicas=descricao_tecnicas,
+    arquetipo_junguiano=arquetipo_junguiano,
+    sombra=sombra,
+    local_sombra=local_sombra,
+    interpretacao_sombra=interpretacao_sombra,
+    cor_correspondente_sombra=cor_correspondente_sombra,
+    local_personalidade=local_personalidade,
+    interpretacao_personalidade=interpretacao_personalidade,
+    contexto_relevante=contexto_relevante
+)
+
+# Exibindo o texto final
+st.subheader("Texto Final")
+st.write(texto_final)
 
 # Título do app
 st.title("Análise de Pintura")

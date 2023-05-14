@@ -347,7 +347,7 @@ cores_junguianas = {
 
 # Configurações do aplicativo Streamlit
 st.image("clube.png")  # Adiciona a imagem no topo do app
-st.title("Análise de Cor Dominante")
+st.title("Análise de Cor Dominante das Pinturas de Telas")
 st.write("Carregue uma imagem e descubra a cor dominante e sua correspondência no dicionário de cores junguianas.")
 
 # Carregar a imagem

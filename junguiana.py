@@ -414,11 +414,17 @@ if imagem is not None:
     # Definição do template
     texto_template = """
     Tema: {tema}
+    
     Nome da Obra: {nome_obra}
+    
     Técnica Utilizada: {tecnica}
+    
     Dimensões da Tela: {dimensoes}
+    
     Idade do Artista: {idade}
+    
     Artista de Referência: {artista_referencia}
+    
     Estilo Artístico: {estilo_artistico}
 
     Elemento Retratado: {elemento_retratado}

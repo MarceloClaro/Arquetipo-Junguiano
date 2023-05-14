@@ -428,10 +428,13 @@ if imagem is not None:
     Estilo Artístico: {estilo_artistico}
 
     Elemento Retratado: {elemento_retratado}
+    
     Descrição da Figura: {descricao_figura}
+    
     Gênero da Figura: {genero_figura}
 
     Descrição do Ambiente: {descricao_ambiente}
+    
     Cor Dominante: {cor_dominante}
 
     Descrição das Técnicas Utilizadas: {descricao_tecnicas}
@@ -439,12 +442,17 @@ if imagem is not None:
     Arquétipo Junguiano: {arquetipo_junguiano}
 
     Sombra: {sombra}
+    
     Local da Sombra: {local_sombra}
+    
     Interpretação da Sombra: {interpretacao_sombra}
+    
     Cor Correspondente à Sombra: {cor_correspondente_sombra}
 
     Local da Personalidade: {local_personalidade}
+    
     Interpretação da Personalidade: {interpretacao_personalidade}
+    
     Contexto Relevante: {contexto_relevante}
     """
 

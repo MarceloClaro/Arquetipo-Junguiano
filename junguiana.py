@@ -19,6 +19,7 @@ def encontrar_cor_mais_proxima(rgb):
 
 # Carregar o dicionário com as cores junguianas
 
+
 cores_junguianas = {
     '1': {
         'cor': 'Vermelho Vivo',
@@ -343,6 +344,7 @@ cores_junguianas = {
 }
 
 
+
 # Configurações do aplicativo Streamlit
 st.title("Análise de Cor Dominante")
 st.write("Carregue uma imagem e descubra a cor dominante e sua correspondência no dicionário de cores junguianas.")
@@ -385,75 +387,90 @@ if imagem is not None:
     imagem_segmentada = cor_dominante.reshape(1, 1, 3)
     st.image(imagem_segmentada, caption="Imagem Segmentada do Cluster", use_column_width=True)
 
-# Continuação do código...
 
-# Variáveis do usuário
-tema = st.text_input("Tema da Pintura")
-nome_obra = st.text_input("Nome da Obra")
-tecnica = st.text_input("Técnica Utilizada")
-dimensoes = st.text_input("Dimensões da Tela")
-idade = st.number_input("Idade do Artista")
-artista_referencia = st.text_input("Artista de Referência")
-estilo_artistico = st.text_input("Estilo Artístico")
-elemento_retratado = st.text_input("Elemento Retratado")
-descricao_figura = st.text_input("Descrição da Figura")
-genero_figura = st.text_input("Gênero da Figura")
-descricao_ambiente = st.text_input("Descrição do Ambiente")
-cor_dominante = cor_proxima["cor"]
-descricao_tecnicas = st.text_input("Descrição das Técnicas Utilizadas")
-arquetipo_junguiano = cor_proxima["anima_animico"]
-sombra = cor_proxima["sombra"]
-local_sombra = st.text_input("Local da Sombra")
-interpretacao_sombra = st.text_input("Interpretação da Sombra")
-cor_correspondente_sombra = cor_proxima["cor"]
-local_personalidade = st.text_input("Local da Personalidade")
-interpretacao_personalidade = st.text_input("Interpretação da Personalidade")
-contexto_relevante = st.text_input("Contexto Relevante")
+    # Variáveis do usuário
+    tema = st.text_input("Tema da Pintura")
+    nome_obra = st.text_input("Nome da Obra")
+    tecnica = st.text_input("Técnica Utilizada")
+    dimensoes = st.text_input("Dimensões da Tela")
+    idade = st.number_input("Idade do Artista")
+    artista_referencia = st.text_input("Artista de Referência")
+    estilo_artistico = st.text_input("Estilo Artístico")
+    elemento_retratado = st.text_input("Elemento Retratado")
+    descricao_figura = st.text_input("Descrição da Figura")
+    genero_figura = st.text_input("Gênero da Figura")
+    descricao_ambiente = st.text_input("Descrição do Ambiente")
+    cor_dominante = cor_proxima["cor"]
+    descricao_tecnicas = st.text_input("Descrição das Técnicas Utilizadas")
+    arquetipo_junguiano = cor_proxima["anima_animico"]
+    sombra = cor_proxima["sombra"]
+    local_sombra = st.text_input("Local da Sombra")
+    interpretacao_sombra = st.text_input("Interpretação da Sombra")
+    cor_correspondente_sombra = cor_proxima["cor"]
+    local_personalidade = st.text_input("Local da Personalidade")
+    interpretacao_personalidade = st.text_input("Interpretação da Personalidade")
+    contexto_relevante = st.text_input("Contexto Relevante")
 
-# Preenchendo o template com as variáveis do usuário
-texto_final = texto_template.format(
-    tema=tema,
-    nome_obra=nome_obra,
-    tecnica=tecnica,
-    dimensoes=dimensoes,
-    idade=idade,
-    artista_referencia=artista_referencia,
-    estilo_artistico=estilo_artistico,
-    elemento_retratado=elemento_retratado,
-    descricao_figura=descricao_figura,
-    genero_figura=genero_figura,
-    descricao_ambiente=descricao_ambiente,
-    cor_dominante=cor_dominante,
-    descricao_tecnicas=descricao_tecnicas,
-    arquetipo_junguiano=arquetipo_junguiano,
-    sombra=sombra,
-    local_sombra=local_sombra,
-    interpretacao_sombra=interpretacao_sombra,
-    cor_correspondente_sombra=cor_correspondente_sombra,
-    local_personalidade=local_personalidade,
-    interpretacao_personalidade=interpretacao_personalidade,
-    contexto_relevante=contexto_relevante
-)
+    # Definição do template
+    texto_template = """
+    Tema: {tema}
+    Nome da Obra: {nome_obra}
+    Técnica Utilizada: {tecnica}
+    Dimensões da Tela: {dimensoes}
+    Idade do Artista: {idade}
+    Artista de Referência: {artista_referencia}
+    Estilo Artístico: {estilo_artistico}
 
-# Exibindo o texto final
-st.subheader("Texto Final")
-st.write(texto_final)
+    Elemento Retratado: {elemento_retratado}
+    Descrição da Figura: {descricao_figura}
+    Gênero da Figura: {genero_figura}
 
-# Título do app
-st.title("Análise de Pintura")
+    Descrição do Ambiente: {descricao_ambiente}
+    Cor Dominante: {cor_dominante}
 
-# Template do texto
-texto_template = """Tema: "{tema}"
+    Descrição das Técnicas Utilizadas: {descricao_tecnicas}
 
-OBRA: "{nome_obra}"
+    Arquétipo Junguiano: {arquetipo_junguiano}
 
-A curadoria da pintura, "{nome_obra}", é um trabalho de {tecnica} sobre tela de {dimensoes} criado por um artista de {idade} anos inspirado no estilo artístico semelhante ao de {artista_referencia}, pintor {estilo_artistico}. O artista apresenta sua própria visão da {elemento_retratado}, retratando {descricao_figura}, enquanto {genero_figura} observa {descricao_ambiente}, envolvida por uma aura {cor_dominante}.
+    Sombra: {sombra}
+    Local da Sombra: {local_sombra}
+    Interpretação da Sombra: {interpretacao_sombra}
+    Cor Correspondente à Sombra: {cor_correspondente_sombra}
 
-O processo criativo do artista envolveu {descricao_tecnicas}, aplicando essas técnicas à sua própria pintura de {elemento_retratado}. Essa obra faz parte das obras "{tema}" do artista, demonstrando uma visão e paixão pela arte desde uma idade jovem.
+    Local da Personalidade: {local_personalidade}
+    Interpretação da Personalidade: {interpretacao_personalidade}
+    Contexto Relevante: {contexto_relevante}
+    """
 
-Extraindo a cor dominante do quadro, {cor_dominante}, podemos analisar os arquétipos junguianos presentes na obra. A cor {cor_dominante} está associada ao {arquetipo_junguiano}, refletindo a conexão do {elemento_retratado} com o arquétipo. A sombra é representada pela cor {sombra} presente {local_sombra}, simbolizando {interpretacao_sombra}. A personalidade é representada pela cor {cor_correspondente_sombra} do {local_personalidade}, simbolizando {interpretacao_personalidade}.
+    # Preenchendo o template com as variáveis do usuário
+    texto_final = texto_template.format(
+        tema=tema,
+        nome_obra=nome_obra,
+        tecnica=tecnica,
+        dimensoes=dimensoes,
+        idade=idade,
+        artista_referencia=artista_referencia,
+        estilo_artistico=estilo_artistico,
+        elemento_retratado=elemento_retratado,
+        descricao_figura=descricao_figura,
+        genero_figura=genero_figura,
+        descricao_ambiente=descricao_ambiente,
+        cor_dominante=cor_dominante,
+        descricao_tecnicas=descricao_tecnicas,
+        arquetipo_junguiano=arquetipo_junguiano,
+        sombra=sombra,
+        local_sombra=local_sombra,
+        interpretacao_sombra=interpretacao_sombra,
+        cor_correspondente_sombra=cor_correspondente_sombra,
+        local_personalidade=local_personalidade,
+        interpretacao_personalidade=interpretacao_personalidade,
+        contexto_relevante=contexto_relevante
+    )
 
-Essa obra tem relevância social e histórica, retratando {contexto_relevante}. Além disso, a arte contemporânea utiliza uma temática atemporal para se conectar com as audiências modernas. Essa obra pode ser apreciada não apenas em galerias físicas, mas também em galerias virtuais com experiência VR, tornando a arte acessível a todos.
+    # Exibindo o texto final
+    st.subheader("Texto Final")
+    st.write(texto_final)
 
-A pintura "{nome_obra}" é uma peça impressionante de um jovem artista promissor que demonstra uma habilidade notável em retratar {elemento_retratado}. É uma obra que certamente merece ser apreciada e analisada mais profundamente.
-"""
+
+
+

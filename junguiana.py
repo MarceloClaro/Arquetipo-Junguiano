@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 from sklearn.metrics.pairwise import euclidean_distances
 from PIL import Image
+
 # Dicionário de cores
 cores = {
     '1': {
@@ -326,6 +327,49 @@ cores = {
         'diagnostico': 'Ao utilizar o Marrom Quente em suas telas, você traz uma sensação de conexão e pertencimento à sua expressão artística. Essa cor carrega a mensagem de comunidade, incentivando-o a compartilhar sua arte e a se conectar com outros artistas e apreciadores da arte.'
     }
 }
+
+
+
+# Função para encontrar a cor mais próxima
+def encontrar_cor_proxima(rgb):
+    cor_proxima = None
+    menor_distancia = float('inf')
+    for chave, valor in cores.items():
+        distancia_cor = distance.euclidean(rgb, valor['rgb'])
+        if distancia_cor < menor_distancia:
+            menor_distancia = distancia_cor
+            cor_proxima = valor
+    return cor_proxima
+
+# Configurações do Streamlit
+st.title("Análise de Cores em Imagens")
+st.subheader("Carregue uma imagem e veja a cor dominante e a cor mais próxima das cores do dicionário")
+
+# Carregar a imagem
+imagem = st.file_uploader("Selecione uma imagem", type=['png', 'jpg', 'jpeg'])
+
+if imagem is not None:
+    # Exibir a imagem carregada
+    img = Image.open(imagem)
+    st.image(img, caption='Imagem carregada', use_column_width=True)
+
+    # Converter a imagem para matriz numpy
+    img_array = np.array(img)
+
+    # Encontrar a cor dominante
+    cor_dominante = tuple(np.mean(img_array, axis=(0, 1)).astype(int))
+
+    # Encontrar a cor mais próxima
+    cor_proxima = encontrar_cor_proxima(cor_dominante)
+
+    # Exibir informações sobre as cores
+    st.subheader("Análise de Cores:")
+    st.write("Cor Dominante: RGB", cor_dominante)
+    st.write("Cor Mais Próxima do Dicionário:")
+    st.write(" - Cor:", cor_proxima['cor'])
+    st.write(" - Anima/Anímico:", cor_proxima['anima_animico'])
+    st.write(" - Sombra:", cor_proxima['sombra'])
+    st.write(" - Personalidade:", cor_proxima['personalidade'])
 
 # Função para encontrar a cor mais próxima
 def encontrar_cor_proxima(rgb):

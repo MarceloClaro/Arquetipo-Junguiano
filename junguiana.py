@@ -327,36 +327,43 @@ cores = {
     }
 }
 
-def encontrar_cor_mais_proxima(cor_rgb):
-    distancias = []
-    for cor_id, cor_info in cores.items():
-        cor_rgb_dict = cor_info['rgb']
-        distancia = euclidean_distances([cor_rgb], [cor_rgb_dict])[0][0]
-        distancias.append((cor_id, distancia))
-    distancias = sorted(distancias, key=lambda x: x[1])
-    return distancias[0][0]
+# Função para encontrar a cor mais próxima
+def encontrar_cor_proxima(rgb):
+    cor_proxima = None
+    menor_distancia = float('inf')
+    for chave, valor in cores.items():
+        distancia_cor = distance.euclidean(rgb, valor['rgb'])
+        if distancia_cor < menor_distancia:
+            menor_distancia = distancia_cor
+            cor_proxima = valor
+    return cor_proxima
 
-def analisar_imagem(imagem):
-    imagem_rgb = cv2.cvtColor(imagem, cv2.COLOR_BGR2RGB)
-    altura, largura, _ = imagem_rgb.shape
-    imagem_rgb = imagem_rgb.reshape(altura * largura, 3)
-    cor_dominante = np.mean(imagem_rgb, axis=0)
-    cor_mais_proxima = encontrar_cor_mais_proxima(cor_dominante)
-    return cor_dominante, cor_mais_proxima
+# Configurações do Streamlit
+st.title("Análise de Cores em Imagens")
+st.subheader("Carregue uma imagem e veja a cor dominante e a cor mais próxima das cores do dicionário")
 
-# Configuração do aplicativo Streamlit
-st.title("Análise de Cor em Imagem")
-uploaded_file = st.file_uploader("Carregue uma imagem", type=["jpg", "jpeg", "png"])
+# Carregar a imagem
+imagem = st.file_uploader("Selecione uma imagem", type=['png', 'jpg', 'jpeg'])
 
-if uploaded_file is not None:
-    imagem = cv2.imdecode(np.frombuffer(uploaded_file.read(), np.uint8), -1)
-    st.image(imagem, channels="BGR")
+if imagem is not None:
+    # Exibir a imagem carregada
+    img = Image.open(imagem)
+    st.image(img, caption='Imagem carregada', use_column_width=True)
 
-    cor_dominante, cor_mais_proxima = analisar_imagem(imagem)
+    # Converter a imagem para matriz numpy
+    img_array = np.array(img)
 
-    st.subheader("Cor Dominante")
-    st.write(f"RGB: {cor_dominante.astype(int)}")
+    # Encontrar a cor dominante
+    cor_dominante = tuple(np.mean(img_array, axis=(0, 1)).astype(int))
 
-    st.subheader("Cor Mais Próxima do Dicionário")
-    st.write(cores[cor_mais_proxima]['cor'])
-    st.write(f"RGB: {cores[cor_mais_proxima]['rgb']}")
+    # Encontrar a cor mais próxima
+    cor_proxima = encontrar_cor_proxima(cor_dominante)
+
+    # Exibir informações sobre as cores
+    st.subheader("Análise de Cores:")
+    st.write("Cor Dominante: RGB", cor_dominante)
+    st.write("Cor Mais Próxima do Dicionário:")
+    st.write(" - Cor:", cor_proxima['cor'])
+    st.write(" - Anima/Anímico:", cor_proxima['anima_animico'])
+    st.write(" - Sombra:", cor_proxima['sombra'])
+    st.write(" - Personalidade:", cor_proxima['personalidade'])

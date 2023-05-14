@@ -380,10 +380,7 @@ if imagem is not None:
     st.write(f"Anima/Animico: {cor_proxima['anima_animico']}")
     st.write(f"Sombra: {cor_proxima['sombra']}")
     st.write(f"Personalidade: {cor_proxima['personalidade']}")
-    st.write(f"Diagnóstico: {cor_proxima['diagnostico']}")    
-
-
-
+    st.write(f"Diagnóstico: {cor_proxima['diagnostico']}")
     # Exibir a imagem segmentada do cluster
     imagem_segmentada = cor_dominante.reshape(1, 1, 3)
     st.image(imagem_segmentada, caption="Imagem Segmentada do Cluster", use_column_width=True)
@@ -391,40 +388,6 @@ if imagem is not None:
 
 # Título do app
 st.title("Análise de Pintura")
-
-# Variáveis para preenchimento do template
-tema = st.text_input("Tema")
-nome_obra = st.text_input("Nome da Obra")
-tecnica = st.text_input("Técnica")
-dimensoes = st.text_input("Dimensões")
-idade = st.number_input("Idade do Artista")
-artista_referencia = st.text_input("Artista de Referência")
-estilo_artistico = st.text_input("Estilo Artístico")
-elemento_retratado = st.text_input("Elemento Retratado")
-cor_dominante = st.text_input("Cor Dominante Encontrada")
-detalhes_adicionais = st.text_area("Detalhes Adicionais")
-genero_figura = st.text_input("Gênero da Figura")
-descricao_figura = st.text_area("Descrição da Figura")
-descricao_ambiente = st.text_area("Descrição do Ambiente")
-cor_correspondente = st.text_input("Cor Correspondente no Dicionário de Cores Junguianas")
-artista_referencia = st.text_input("Artista de Referência")
-descricao_tecnicas = st.text_area("Descrição das Técnicas")
-tema = st.text_input("Tema")
-cor_dominante = st.text_input("Cor Dominante Encontrada")
-arquetipo_junguiano = st.text_input("Arquétipo Junguiano")
-interpretacao_conexao = st.text_area("Interpretação da Conexão do Elemento Retratado com o Arquétipo")
-sombra = st.text_input("Sombra")
-local_sombra = st.text_input("Local onde a Sombra é Encontrada")
-interpretacao_sombra = st.text_area("Interpretação do Significado da Sombra")
-cor_correspondente_sombra = st.text_input("Cor Correspondente no Dicionário de Cores Junguianas (Sombra)")
-local_personalidade = st.text_input("Local onde a Personalidade é Representada")
-interpretacao_personalidade = st.text_area("Interpretação do Significado da Personalidade")
-contexto_relevante = st.text_area("Contexto Relevante")
-tema_central = st.text_input("Tema Central")
-tema_secundario = st.text_input("Tema Secundário")
-nome_obra = st.text_input("Nome da Obra")
-idade_artista = st.number_input("Idade do Artista")
-elemento_retratado = st.text_input("Elemento Retratado")
 
 # Template do texto
 texto_template = f"""Tema: "{tema}"
@@ -440,4 +403,5 @@ Extraindo a cor dominante do quadro, {cor_dominante}, podemos analisar os arqué
 Essa obra tem relevância social e histórica, retratando {contexto_relevante}. Além disso, a arte contemporânea utiliza uma temática atemporal para se conectar com as audiências modernas. Essa obra pode ser apreciada não apenas em galerias físicas, mas também em galerias virtuais com experiência VR, tornando a arte acessível a todos.
 
 A pintura "{nome_obra}" é uma peça impressionante de um jovem artista promissor que demonstra uma habilidade notável em retratar {elemento_retratado}. É uma obra que certamente merece ser apreciada e analisada mais profundamente.
+"""
 

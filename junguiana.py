@@ -404,4 +404,3 @@ Essa obra tem relevância social e histórica, retratando {contexto_relevante}. 
 
 A pintura "{nome_obra}" é uma peça impressionante de um jovem artista promissor que demonstra uma habilidade notável em retratar {elemento_retratado}. É uma obra que certamente merece ser apreciada e analisada mais profundamente.
 """
-

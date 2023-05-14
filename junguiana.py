@@ -2,7 +2,7 @@ import streamlit as st
 import cv2
 import numpy as np
 from sklearn.metrics.pairwise import euclidean_distances
-
+from PIL import Image
 # Dicionário de cores
 cores = {
     '1': {

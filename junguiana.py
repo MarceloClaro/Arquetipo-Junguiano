@@ -1,199 +1,362 @@
-import streamlit as st  # importar biblioteca streamlit para criar interface gráfica 
-#import plotly_express as px # importar biblioteca plotly express para criar gráficos  
-import pandas as pd # importar biblioteca pandas para manipular dados em formato de tabela 
-import numpy as np # importa numpy para manipular dados em formato de matriz  
-import cv2 #import opencv #importar biblioteca opencv para manipular imagens 
-#import csv # importar csv para manipular arquivos csv  
-import colorsys # importar colorsys para converter rgb para munsell  
-#from matplotlib import pyplot as plt # importa pyplot para criar gráficos 
-from sklearn.cluster import KMeans # importa k-means para segmentação de imagens 
-#from PIL import Image # importa biblioteca para manipular imagens  
+import streamlit as st
+import cv2
+import numpy as np
+from sklearn.metrics.pairwise import euclidean_distances
 
+# Dicionário de cores
+cores = {
+    '1': {
+        'cor': 'Vermelho Vivo',
+        'rgb': (255, 0, 0),
+        'anima_animico': 'Vitalidade',
+        'sombra': 'Impulsividade',
+        'personalidade': 'Autocontrole',
+        'diagnostico': 'No processo de pintura de tela, o Vermelho Vivo representa uma expressão intensa de energia e paixão. Sua mensagem é de vitalidade e autenticidade, encorajando a expressão livre de emoções.'
+    },
+    '2': {
+        'cor': 'Rosa Brilhante',
+        'rgb': (255, 105, 180),
+        'anima_animico': 'Abundância',
+        'sombra': 'Propensão ao Excesso',
+        'personalidade': 'Equilíbrio',
+        'diagnostico': 'Ao pintar com o Rosa Brilhante, você traz uma sensação de abundância e gratidão à sua tela. A mensagem transmitida por essa cor é de equilíbrio emocional e alegria na expressão artística.'
+    },
+    '3': {
+        'cor': 'Laranja Ardente',
+        'rgb': (255, 140, 0),
+        'anima_animico': 'Entusiasmo',
+        'sombra': 'Imaturidade',
+        'personalidade': 'Sabedoria',
+        'diagnostico': 'A cor Laranja Ardente em seu processo de pintura representa entusiasmo e criatividade vibrantes. Ela convida você a abraçar sua criança interior e expressar-se com alegria e sabedoria.'
+    },
+    '4': {
+        'cor': 'Magenta Vibrante',
+        'rgb': (255, 0, 255),
+        'anima_animico': 'Criatividade',
+        'sombra': 'Contrariedade',
+        'personalidade': 'Flexibilidade',
+        'diagnostico': 'Quando você pinta com Magenta Vibrante, está canalizando sua criatividade e expressão artística única. Essa cor traz uma mensagem de flexibilidade e adaptabilidade diante dos desafios.'
+    },
+    '5': {
+        'cor': 'Índigo Profundo',
+        'rgb': (75, 0, 130),
+        'anima_animico': 'Intuição',
+        'sombra': 'Dúvida',
+        'personalidade': 'Inteligência',
+        'diagnostico': 'O Índigo Profundo em sua tela reflete uma conexão profunda com sua intuição e sabedoria interior. Essa cor carrega uma mensagem de confiança e inteligência na manifestação de sua expressão artística.'
+    },
+    '6': {
+        'cor': 'Verde Claro',
+        'rgb': (0, 255, 0),
+        'anima_animico': 'Renovação',
+        'sombra': 'Insegurança',
+        'personalidade': 'Autoconfiança',
+        'diagnostico': 'Quando você pinta com Verde Claro, está trazendo uma sensação de renovação e crescimento à sua expressão artística. Essa cor transmite uma mensagem de autoconfiança, encorajando você a se expressar livremente e acreditar em seu próprio potencial criativo.'
+    },
+    '7': {
+        'cor': 'Azul Elétrico',
+        'rgb': (0, 0, 255),
+        'anima_animico': 'Liberdade',
+        'sombra': 'Desordem',
+        'personalidade': 'Responsabilidade',
+        'diagnostico': 'Ao utilizar o Azul Elétrico em suas telas, você expressa uma sensação de liberdade e expansão. Essa cor transmite a mensagem de equilíbrio entre a liberdade criativa e a responsabilidade de moldar sua expressão artística de forma consciente.'
+    },
+    '8': {
+        'cor': 'Amarelo Solar',
+        'rgb': (255, 255, 0),
+        'anima_animico': 'Otimismo',
+        'sombra': 'Negatividade',
+        'personalidade': 'Intencionalidade',
+        'diagnostico': 'O Amarelo Solar em sua pintura traz uma energia otimista e iluminada. Sua mensagem é de positividade e intencionalidade, convidando-o a expressar sua arte com alegria e propósito.'
+    },
+    '9': {
+        'cor': 'Lilás Suave',
+        'rgb': (204, 153, 255),
+        'anima_animico': 'Humildade',
+        'sombra': 'Inadaptabilidade',
+        'personalidade': 'Adaptabilidade',
+        'diagnostico': 'Ao utilizar o Lilás Suave em suas telas, você traz uma sensação de humildade e suavidade à sua expressão artística. Essa cor carrega a mensagem de adaptabilidade e abertura às transformações que ocorrem durante o processo de pintura.'
+    },
+    '10': {
+        'cor': 'Castanho Neutro',
+        'rgb': (139, 69, 19),
+        'anima_animico': 'Estabilidade',
+        'sombra': 'Estagnação',
+        'personalidade': 'Evolução',
+        'diagnostico': 'A cor Castanho Neutro em sua pintura representa uma sensação de estabilidade e segurança. Sua mensagem é de evolução contínua, incentivando a busca por novas perspectivas e o crescimento artístico.'
+    },
+    '11': {
+        'cor': 'Turquesa Brilhante',
+        'rgb': (0, 255, 255),
+        'anima_animico': 'Energia',
+        'sombra': 'Impaciência',
+        'personalidade': 'Paciência',
+        'diagnostico': 'Quando você pinta com Turquesa Brilhante, está trazendo uma energia vibrante e estimulante à sua tela. Essa cor transmite uma mensagem de equilíbrio entre a energia criativa e a paciência necessária para desenvolver sua expressão artística de forma completa e satisfatória.'
+    },
+    '12': {
+        'cor': 'Cinza Algo',
+        'rgb': (128, 128, 128),
+        'anima_animico': 'Introversão',
+        'sombra': 'Desalinho',
+        'personalidade': 'Clareza',
+        'diagnostico': 'Ao utilizar o Cinza Algo em suas telas, você traz uma atmosfera de introspecção e reflexão. Essa cor carrega a mensagem de encontrar clareza e foco em meio à desordem, incentivando uma expressão artística alinhada com sua verdade interior.'
+    },
+    '13': {
+        'cor': 'Branco Radiante',
+        'rgb': (255, 255, 255),
+        'anima_animico': 'Pureza',
+        'sombra': 'Falsidade',
+        'personalidade': 'Honradez',
+        'diagnostico': 'O Branco Radiante em seu processo de pintura representa pureza e autenticidade. Sua mensagem é de honradez na expressão artística, encorajando você a pintar com sinceridade e verdade, evitando qualquer falsidade.'
+    },
+    '14': {
+        'cor': 'Azul Escuro',
+        'rgb': (0, 0, 128),
+        'anima_animico': 'Segurança',
+        'sombra': 'Desconfiança',
+        'personalidade': 'Tranquilidade',
+        'diagnostico': 'Ao utilizar o Azul Escuro em suas telas, você transmite uma sensação de segurança e tranquilidade. Essa cor carrega a mensagem de confiança na expressão artística, permitindo-se mergulhar nas profundezas da criatividade com confiança e serenidade.'
+    },
+    '15': {
+        'cor': 'Verde Escuro',
+        'rgb': (0, 100, 0),
+        'anima_animico': 'Estoicismo',
+        'sombra': 'Frialdade',
+        'personalidade': 'Afetuosidade',
+        'diagnostico': 'Quando você pinta com Verde Escuro, está explorando um senso de estoicismo e serenidade em sua expressão artística. Essa cor transmite a mensagem de equilibrar a frieza com a afetuosidade, resultando em obras cheias de serenidade e profundidade emocional.'
+    },
+    '16': {
+        'cor': 'Laranja Avermelhado',
+        'rgb': (255, 69, 0),
+        'anima_animico': 'Envolvimento',
+        'sombra': 'Insegurança',
+        'personalidade': 'Confiança',
+        'diagnostico': 'Ao utilizar o Laranja Avermelhado em suas telas, você traz um senso de envolvimento e paixão à sua expressão artística. Essa cor transmite uma mensagem de confiança em si mesmo, encorajando-o a se entregar completamente ao processo criativo e expressar suas emoções e ideias sem medo ou insegurança.'
+    },
+    '17': {
+        'cor': 'Rosa Calorosa',
+        'rgb': (255, 192, 203),
+        'anima_animico': 'Carinho',
+        'sombra': 'Medo',
+        'personalidade': 'Coragem',
+        'diagnostico': 'Ao pintar com Rosa Calorosa, você traz uma energia de carinho e amor à sua tela. Essa cor carrega a mensagem de coragem, convidando-o a se expressar de forma amorosa e gentil através de sua arte, superando qualquer medo que possa surgir.'
+    },
+    '18': {
+        'cor': 'Vermelho Oculto',
+        'rgb': (139, 0, 0),
+        'anima_animico': 'Força',
+        'sombra': 'Ira',
+        'personalidade': 'Autocontrole',
+        'diagnostico': 'Quando você utiliza o Vermelho Oculto em suas telas, traz à tona uma energia poderosa e intensa. Sua mensagem é de força interior e autocontrole, incentivando você a expressar suas emoções com equilíbrio e assertividade, evitando ser dominado pela ira.'
+    },
+    '19': {
+        'cor': 'Magenta Escuro',
+        'rgb': (139, 0, 139),
+        'anima_animico': 'Profundidade',
+        'sombra': 'Desespero',
+        'personalidade': 'Esperança',
+        'diagnostico': 'Ao pintar com Magenta Escuro, você explora as camadas mais profundas de emoção em sua arte. Essa cor carrega a mensagem de encontrar esperança e significado mesmo nas situações mais desafiadoras, superando o desespero e permitindo que a esperança brilhe.'
+    },
+    '20': {
+        'cor': 'Índigo Vintage',
+        'rgb': (75, 0, 130),
+        'anima_animico': 'Consciência',
+        'sombra': 'Desesperança',
+        'personalidade': 'Fé',
+        'diagnostico': 'Ao utilizar o Índigo Vintage em suas telas, você evoca uma consciência profunda e espiritual em sua expressão artística. Essa cor transmite a mensagem de fé e confiança no processo criativo, inspirando-o a pintar com significado e propósito, mesmo em momentos de desesperança.'
+    },
+    '21': {
+        'cor': 'Verde Menta',
+        'rgb': (152, 251, 152),
+        'anima_animico': 'Calma',
+        'sombra': 'Desânimo',
+        'personalidade': 'Perseverança',
+        'diagnostico': 'Quando você pinta com Verde Menta, traz uma sensação de calma e tranquilidade à sua expressão artística. Essa cor transmite a mensagem de perseverança, incentivando você a persistir em sua jornada artística mesmo diante dos desafios e momentos de desânimo.'
+    },
+    '22': {
+        'cor': 'Azul Petróleo',
+        'rgb': (0, 128, 128),
+        'anima_animico': 'Liderança',
+        'sombra': 'Rigidez',
+        'personalidade': 'Suavidade',
+        'diagnostico': 'Ao utilizar o Azul Petróleo em suas telas, você evoca uma energia de liderança e autoridade na sua expressão artística. Essa cor carrega a mensagem de suavidade e flexibilidade, incentivando uma abordagem harmoniosa e receptiva em sua arte.'
+    },
+    '23': {
+        'cor': 'Amarelo Luminoso',
+        'rgb': (255, 255, 102),
+        'anima_animico': 'Alegria',
+        'sombra': 'Ansiedade',
+        'personalidade': 'Autogoverno',
+        'diagnostico': 'Quando você pinta com Amarelo Luminoso, está trazendo uma energia de alegria e otimismo à sua tela. Essa cor transmite a mensagem de autogoverno, convidando-o a expressar sua arte com confiança e leveza, superando a ansiedade.'
+    },
+    '24': {
+        'cor': 'Lilás Atrevido',
+        'rgb': (153, 50, 204),
+        'anima_animico': 'Intriga',
+        'sombra': 'Preconceito',
+        'personalidade': 'Respeito',
+        'diagnostico': 'Ao utilizar o Lilás Atrevido em suas telas, você traz uma sensação de intriga e curiosidade à sua expressão artística. Essa cor carrega a mensagem de respeito, incentivando-o a abraçar a diversidade e a explorar diferentes perspectivas em sua arte.'
+    },
+    '25': {
+        'cor': 'Marrom Neutro',
+        'rgb': (139, 69, 19),
+        'anima_animico': 'Praticidade',
+        'sombra': 'Comodismo',
+        'personalidade': 'Determinação',
+        'diagnostico': 'Ao utilizar o Marrom Neutro em suas telas, você traz uma sensação de praticidade e estabilidade à sua expressão artística. Essa cor carrega a mensagem de determinação, convidando-o a se comprometer com seu processo criativo e superar o comodismo.'
+    },
+    '26': {
+        'cor': 'Turquesa Refinado',
+        'rgb': (64, 224, 208),
+        'anima_animico': 'Gratidão',
+        'sombra': 'Resentimento',
+        'personalidade': 'Agradecimento',
+        'diagnostico': 'Ao pintar com Turquesa Refinado, você expressa uma profunda gratidão em sua arte. Essa cor transmite a mensagem de agradecimento, convidando-o a apreciar e valorizar o processo criativo, superando qualquer sentimento de ressentimento.'
+    },
+    '27': {
+        'cor': 'Cinza Confiante',
+        'rgb': (128, 128, 128),
+        'anima_animico': 'Resiliência',
+        'sombra': 'Hiperestimulação',
+        'personalidade': 'Autorespeito',
+        'diagnostico': 'Ao utilizar o Cinza Confiante em suas telas, você evoca uma energia de resiliência e autodeterminação em sua expressão artística. Essa cor carrega a mensagem de autorespeito, incentivando-o a cuidar de si mesmo e a encontrar um equilíbrio saudável em seu processo criativo.'
+    },
+    '28': {
+        'cor': 'Branco Clássico',
+        'rgb': (245, 245, 245),
+        'anima_animico': 'Simplicidade',
+        'sombra': 'Conformismo',
+        'personalidade': 'Inovação',
+        'diagnostico': 'Ao utilizar o Branco Clássico em suas telas, você traz uma sensação de simplicidade e pureza à sua expressão artística. Essa cor carrega a mensagem de inovação, convidando-o a explorar novas ideias e abordagens criativas em seu trabalho.'
+    },
+    '29': {
+        'cor': 'Azul Marinho',
+        'rgb': (0, 0, 128),
+        'anima_animico': 'Iniciativa',
+        'sombra': 'Intransigência',
+        'personalidade': 'Aceitação',
+        'diagnostico': 'Quando você pinta com Azul Marinho, está trazendo uma energia de iniciativa e determinação à sua tela. Essa cor transmite a mensagem de aceitação, incentivando-o a abraçar diferentes perspectivas e a ser receptivo às mudanças em seu processo criativo.'
+    },
+    '30': {
+        'cor': 'Verde Vinho',
+        'rgb': (128, 0, 0),
+        'anima_animico': 'Experiência',
+        'sombra': 'Ira reprimida',
+        'personalidade': 'Autocura',
+        'diagnostico': 'Ao utilizar o Verde Vinho em suas telas, você traz uma energia de experiência e transformação à sua expressão artística. Essa cor carrega a mensagem de autocura, convidando-o a explorar e liberar qualquer raiva reprimida por meio da arte.'
+    },
+    '31': {
+        'cor': 'Pêssego Radiante',
+        'rgb': (255, 204, 153),
+        'anima_animico': 'Amizade',
+        'sombra': 'Autossabotagem',
+        'personalidade': 'Autocuidado',
+        'diagnostico': 'Ao pintar com Pêssego Radiante, você traz uma energia de amizade e conexão à sua arte. Essa cor carrega a mensagem de autocuidado, convidando-o a cultivar um relacionamento saudável consigo mesmo e a evitar autossabotagem em seu processo criativo.'
+    },
+    '32': {
+        'cor': 'Rosa Neutro',
+        'rgb': (205, 183, 181),
+        'anima_animico': 'Compaixão',
+        'sombra': 'Submissão',
+        'personalidade': 'Autonomia',
+        'diagnostico': 'Ao utilizar o Rosa Neutro em suas telas, você evoca uma energia de compaixão e empatia em sua expressão artística. Essa cor transmite a mensagem de autonomia, incentivando-o a se expressar com autenticidade e a estabelecer limites saudáveis em seu trabalho.'
+    },
+    '33': {
+        'cor': 'Vermelho Real',
+        'rgb': (227, 38, 54),
+        'anima_animico': 'Paixão',
+        'sombra': 'Entrega Excessiva',
+        'personalidade': 'Equilíbrio',
+        'diagnostico': 'Quando você utiliza o Vermelho Real em suas telas, traz uma energia apaixonada e intensa à sua expressão artística. Sua mensagem é de encontrar equilíbrio entre a paixão criativa e a capacidade de manter-se centrado e em controle.'
+    },
+    '34': {
+        'cor': 'Magenta Radiante',
+        'rgb': (255, 0, 144),
+        'anima_animico': 'Vitalidade',
+        'sombra': 'Desmantelamento',
+        'personalidade': 'Integração',
+        'diagnostico': 'Ao pintar com Magenta Radiante, você traz uma vitalidade e energia intensa à sua arte. Essa cor carrega a mensagem de integração, convidando-o a unificar diferentes aspectos de si mesmo e de sua expressão artística para criar uma obra coesa e significativa.'
+    },
+    '35': {
+        'cor': 'Índigo Intenso',
+        'rgb': (75, 0, 130),
+        'anima_animico': 'Intuição',
+        'sombra': 'Ilusões',
+        'personalidade': 'Pragmatismo',
+        'diagnostico': 'Ao utilizar o Índigo Intenso em suas telas, você evoca uma conexão profunda com sua intuição e sabedoria interior. Essa cor transmite a mensagem de pragmatismo, incentivando-o a abordar sua arte de forma prática e fundamentada.'
+    },
+    '36': {
+        'cor': 'Verde Pastel',
+        'rgb': (0, 128, 0),
+        'anima_animico': 'Inspiração',
+        'sombra': 'Imobilidade',
+        'personalidade': 'Iniciativa',
+        'diagnostico': 'Quando você pinta com Verde Pastel, traz uma energia inspiradora e revigorante à sua arte. Essa cor transmite a mensagem de iniciativa, convidando-o a agir e manifestar sua criatividade de forma ativa, superando qualquer sensação de imobilidade.'
+    },
+    '37': {
+        'cor': 'Azul Sereno',
+        'rgb': (0, 191, 255),
+        'anima_animico': 'Paz',
+        'sombra': 'Desconexão',
+        'personalidade': 'Harmonia',
+        'diagnostico': 'Ao utilizar o Azul Sereno em suas telas, você evoca uma sensação de paz e tranquilidade em sua expressão artística. Essa cor carrega a mensagem de harmonia, convidando-o a se conectar consigo mesmo e com o mundo ao seu redor por meio de sua arte.'
+    },
+    '38': {
+        'cor': 'Amarelo Dourado',
+        'rgb': (255, 215, 0),
+        'anima_animico': 'Iluminação',
+        'sombra': 'Egocentrismo',
+        'personalidade': 'Generosidade',
+        'diagnostico': 'Quando você pinta com Amarelo Dourado, traz uma energia de iluminação e expansão à sua arte. Essa cor transmite a mensagem de generosidade, incentivando-o a compartilhar sua criatividade e a inspirar os outros com sua expressão artística.'
+    },
+    '39': {
+        'cor': 'Lilás Sutil',
+        'rgb': (200, 162, 200),
+        'anima_animico': 'Sensibilidade',
+        'sombra': 'Vulnerabilidade',
+        'personalidade': 'Autenticidade',
+        'diagnostico': 'Ao pintar com Lilás Sutil, você evoca uma sensibilidade e delicadeza em sua arte. Essa cor carrega a mensagem de autenticidade, convidando-o a se expressar com verdade e vulnerabilidade, criando obras que tocam o coração dos espectadores.'
+    },
+    '40': {
+        'cor': 'Marrom Quente',
+        'rgb': (139, 69, 19),
+        'anima_animico': 'Conexão',
+        'sombra': 'Isolamento',
+        'personalidade': 'Comunidade',
+        'diagnostico': 'Ao utilizar o Marrom Quente em suas telas, você traz uma sensação de conexão e pertencimento à sua expressão artística. Essa cor carrega a mensagem de comunidade, incentivando-o a compartilhar sua arte e a se conectar com outros artistas e apreciadores da arte.'
+    }
+}
 
+def encontrar_cor_mais_proxima(cor_rgb):
+    distancias = []
+    for cor_id, cor_info in cores.items():
+        cor_rgb_dict = cor_info['rgb']
+        distancia = euclidean_distances([cor_rgb], [cor_rgb_dict])[0][0]
+        distancias.append((cor_id, distancia))
+    distancias = sorted(distancias, key=lambda x: x[1])
+    return distancias[0][0]
 
-def rgb_to_munsell(center,col_c): # define função para converter rgb para munsell
-    r,g,b = center[0][0],center[0][1],center[0][2] # define variáveis para cada canal de cor  
-    #print("R,G,B") # imprime no console  
-    #print(center[0]) # imprime no console  
-    col_c.title('Valores para RGB') # define título para a seção 
-    col_c.write('{0},{1},{2}'.format (r,g,b)) # imprime valores de r,g,b no console  
-    print('passei dentro func') # imprime no console    
-    h, l, s = colorsys.rgb_to_hls(r/255.0, g/255.0, b/255.0) #converter rgb para hls 
-    h = h*360 # converter h de 0-1 para 0-360 
-    if h < 20: # se h for menor que 20
-        hue = "R" # matiz é vermelho
-    elif h < 40: # se h for menor que 40
-        hue = "YR" # matiz é vermelho-amarelo
-    elif h < 75: # se h for menor que 75
-        hue = "Y" # matiz é amarelo
-    elif h < 155: # se h for menor que 155
-        hue = "GY" # matiz é verde-amarelo
-    elif h < 190: # se h for menor que 190
-        hue = "G" # matiz é verde
-    elif h < 260: # se h for menor que 260
-        hue = "BG" # matiz é verde-azulado
-    elif h < 290: # se h for menor que 290
-        hue = "B" # matiz é azul
-    elif h < 335: # se h for menor que 335
-        hue = "PB" # matiz é roxo-azul
-    else:
-        hue = "P" # matiz é roxo
-    if l < 0.25: # se l for menor que 0,2
-        value = "2.5" # valor é 10
-    elif l < 0.3: # se l for menor que 0.4
-        value = "3" # valor é 20
-    elif l < 0.4: # se l for menor que 0.4
-        value = "4" # valor é 20
-    elif l < 0.5: # se l for menor que 0.4
-        value = "5" # valor é 20
-    elif l < 0.6: # se l for menor que 0.6
-        value = "6"  # valor é 30
-    elif l < 0.7: # se l for menor que 0.4
-        value = "7" # valor é 20
-    elif l < 0.8: #  se l for menor que0.8
-        value = "8" # valor é 40
-    else: 
-        value = "10" # valor é 50
-    if s < 0.1: # se s for menor que 0,1
-        chroma = "0" # croma é 0
-    elif s < 0.2: # se s for menor que 0.2
-        chroma = "1" # croma é 1
-    elif s < 0.3: # se s for menor que 0.3
-        chroma = "2" # croma é 2
-    elif s < 0.4: # se s for menor que 0.4
-        chroma = "3" # croma é 3
-    elif s < 0.5: # se s for menor que 0.5
-        chroma = "4" # croma é 4
-    elif s < 0.6: # se s for menor que 0.6
-        chroma = "5" # croma é 5
-    elif s < 0.7:  # se s for menor que 0.7
-        chroma = "6" # croma é 6
-    elif s < 0.8: # se s for menor que 0.8
-        chroma = "7" # croma é 7
-    elif s < 0.9:  # se s for menor que 0.9
-        chroma = "8" # croma é 8
-    elif s < 1.0: # se s for menor que 1.0
-        chroma = "9" # croma é 9
-    col_c.title('Valores para munsell') # define título para a seção 
-    col_c.write('(MATIZ,VALORES,CROMA)') # imprime valores de h,c,v no console   
-    col_c.write('{0},{1},{2}'.format (hue,value,chroma)) # imprime valores de h,l,s no console 
-    #print(hue + " " + value + " " + chroma )# retorna valor de matiz e croma 
+def analisar_imagem(imagem):
+    imagem_rgb = cv2.cvtColor(imagem, cv2.COLOR_BGR2RGB)
+    altura, largura, _ = imagem_rgb.shape
+    imagem_rgb = imagem_rgb.reshape(altura * largura, 3)
+    cor_dominante = np.mean(imagem_rgb, axis=0)
+    cor_mais_proxima = encontrar_cor_mais_proxima(cor_dominante)
+    return cor_dominante, cor_mais_proxima
 
-st.image('clube.png') # insere imagem da carta de munsell
-st.title('Geomaker - Clube de Pintura e Terapia Junguiana ') # define título para a seção 
-st.subheader('Arquétipos Junguiano ') # define subtítulo para a seção FONTE 12
-st.write('Prof. Marcelo Claro / marceloclaro@geomaker.org') # define texto para a seção
-st.write('https://orcid.org/0000-0001-8996-2887') # define texto para a seção
-st.write('Whatsapp - (88)98158-7145') # define texto para a seção
-st.write('https://www.geomaker.org') # define texto para a seção
+# Configuração do aplicativo Streamlit
+st.title("Análise de Cor em Imagem")
+uploaded_file = st.file_uploader("Carregue uma imagem", type=["jpg", "jpeg", "png"])
 
+if uploaded_file is not None:
+    imagem = cv2.imdecode(np.frombuffer(uploaded_file.read(), np.uint8), -1)
+    st.image(imagem, channels="BGR")
 
+    cor_dominante, cor_mais_proxima = analisar_imagem(imagem)
 
-#st.sidebar.subheader('configurações de visualização')
+    st.subheader("Cor Dominante")
+    st.write(f"RGB: {cor_dominante.astype(int)}")
 
-image = st.file_uploader(label = 'Faça o upload da sua imagem',
-                         type = ['jpg','png','jpeg'] )# define a seção para upload de imagem 
-
-
-# converter rgb para munsell
-
-
-col_a,col_b,col_c = st.columns(3) # define a seção para upload de imagem  
-
-
-
-if image is not None: # se imagem for diferente de nulo 
-
-    #print(dir(image.name)) # imprime no console
-    
-    print('passei') # imprime no console
-    #plt.imshow(img) # mostra imagem no console
-    #plt.show() # mostra imagem no console
-    
-    col_a.title('Imagem original') # define título para a seção
-    col_a.image(image) # mostra imagem no console
-    #plt.imshow(img) # mostra imagem no console
-    #plt.show() # mostra imagem no console
-
-
-    file_bytes = np.asarray(bytearray(image.read()), dtype=np.uint8) # converte imagem para array de bytes 
-    opencv_image = cv2.imdecode(file_bytes, 1) # converte imagem para array de bytes 
-    
-    #img = cv2.imread(img_array) # leia a imagem
-    img = cv2.cvtColor(opencv_image, cv2.COLOR_BGR2RGB) #converte para rgb 
-    Z = img.reshape((-1,3)) # remodela para uma lista de pixels 
-    Z = np.float32(Z) # converter para np.float32
-    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0) # define critérios, número de clusters(K) e aplica kmeans()
-    K = 1 # número de clusters
-    ret,label,center=cv2.kmeans(Z,K,None,criteria,10,cv2.KMEANS_RANDOM_CENTERS) # converte para valores de 8 bits
-    center = np.uint8(center) # converte para uint8
-    print('calculado o center') # imprime no console 
-    res = center[label.flatten()] # converte de volta para a imagem de 3 canais da imagem de 1 canal
-    #col_b.image() # mostra imagem no console
-    res2 = res.reshape((img.shape)) # mostra a imagem
-    col_b.title('Imagem processada')# define título para a seção    
-    col_b.image(res2) # mostra imagem no console 
-    #plt.imshow(res2)
-    #plt.show() 
-
-
-    print("R,G,B") # imprime no console
-    print(center[0]) # imprime no console 
-
-    #print("Munsell") # imprime no console
-    #print(rgb_to_munsell(center[0][0],center[0][1],center[0][2]))
-    st.button('__________________', on_click = rgb_to_munsell(center,col_c)) # imprime no console
-    
-
-   
-
-    st.write('FONTE:  https://pteromys.melonisland.net/munsell/') # imprime no console
-    st.write('FONTE:  http://www.rit-mcsl.org/MunsellRenotation/all.dat') # imprime no console
-    st.write('') # imprime no console
-
-st.subheader('Arquétipos Junguiano - Legenda de 45 cores ') # define subtítulo para a seção FONTE 14
-st.write('1. Vermelho Vivo — Anima/Anímico: Vitalidade; Sombra: Impulsividade; Personalidade: Autocontrole.')
-st.write('2. Rosa Brilhante — Anima/Anímico: Abundância; Sombra: Propensão ao Excesso; Personalidade: Equilíbrio.') 
-st.write('3. Laranja Ardente — Anima/Anímico: Entusiasmo; Sombra: Imaturidade; Personalidade: Sabedoria. ')
-st.write('4. Magenta Vibrante — Anima/Anímico: Criatividade; Sombra: Contrariedade; Personalidade: Flexibilidade.') 
-st.write('5. Índigo Profundo — Anima/Anímico: Intuição; Sombra: Dúvida; Personalidade: Inteligência. ')
-st.write('6. Verde Claro — Anima/Anímico: Renovação; Sombra: Insegurança; Personalidade: Autoconfiança.') 
-st.write('7. Azul Elétrico — Anima/Anímico: Liberdade; Sombra: Desordem; Personalidade: Responsabilidade.') 
-st.write('8. Amarelo Solar — Anima/Anímico: Otimismo; Sombra: Negatividade; Personalidade: Intencionalidade.') 
-st.write('9. Lilás Suave — Anima/Anímico: Humildade; Sombra: Inadaptabilidade; Personalidade: Adaptabilidade. ')
-st.write('10. Castanho Neutro — Anima/Anímico: Estabilidade; Sombra: Estagnação; Personalidade: Evolução. ')
-st.write('11. Turquesa Brilhante — Anima/Anímico: Energia; Sombra: Impaciência; Personalidade: Paciência. ')
-st.write('12. Cinza Algo — Anima/Anímico: Introversão; Sombra: Desalinho; Personalidade: Clareza. ')
-st.write('13. Branco Radiante — Anima/Anímico: Pureza; Sombra: Falsidade; Personalidade: Honradez. ')
-st.write('14. Azul Escuro — Anima/Anímico: Segurança; Sombra: Desconfiança; Personalidade: Tranquilidade.') 
-st.write('15. Verde Escuro — Anima/Anímico: Estoicismo; Sombra: Frialdade; Personalidade: Afetuosidade. ')
-st.write('16. Laranja Avermelhado — Anima/Anímico: Envolvimento; Sombra: Insegurança; Personalidade: Confiança.') 
-st.write('17. Rosa Calorosa — Anima/Anímico: Carinho; Sombra: Medo; Personalidade: Coragem. ')
-st.write('18. Vermelho Oculto — Anima/Anímico: Força; Sombra: Ira; Personalidade: Autocontrole.') 
-st.write('19. Magenta Escuro — Anima/Anímico: Profundidade; Sombra: Desespero; Personalidade: Esperança.') 
-st.write('20. Índigo Vintage — Anima/Anímico: Consciência; Sombra: Desesperança; Personalidade: Fé. ')
-st.write('21. Verde Menta — Anima/Anímico: Calma; Sombra: Desânimo; Personalidade: Perseverança. ')
-st.write('22. Azul Petróleo — Anima/Anímico: Liderança; Sombra: Rigidez; Personalidade: Suavidade. ')
-st.write('23. Amarelo Luminoso — Anima/Anímico: Alegria; Sombra: Ansiedade; Personalidade: Autogoverno. ')
-st.write('24. Lilás Atrevido — Anima/Anímico: Intriga; Sombra: Preconceito; Personalidade: Respeito. ')
-st.write('25. Marrom Neutro — Anima/Anímico: Praticidade; Sombra: Comodismo; Personalidade: Determinação. ')
-st.write('26. Turquesa Refinado — Anima/Anímico: Gratidão; Sombra: Resentimento; Personalidade: Agradecimento. ')
-st.write('27. Cinza Confiante — Anima/Anímico: Resiliência; Sombra: Hiperestimulação; Personalidade: Autorespeito. ')
-st.write('28. Branco Clássico — Anima/Anímico: Simplicidade; Sombra: Conformismo; Personalidade: Inovação. ')
-st.write('29. Azul Marinho — Anima/Anímico: Iniciativa; Sombra: Intransigência; Personalidade: Aceitação. ')
-st.write('30. Verde Vinho — Anima/Anímico: Experiência; Sombra: Ira reprimida; Personalidade: Autocura. ')
-st.write('31. Pêssego Radiante — Anima/Anímico: Amizade; Sombra: Autossabotagem; Personalidade: Autocuidado. ')
-st.write('32. Rosa Neutro — Anima/Anímico: Compaixão; Sombra: Submissão; Personalidade: Autonomia. ')
-st.write('33. Vermelho Real — Anima/Anímico: Paixão; Sombra: Entrega Excessiva; Personalidade: Equilíbrio. ')
-st.write('34. Magenta Radiante — Anima/Anímico: Vitalidade; Sombra: Desmantelamento; Personalidade: Integração. ')
-st.write('35. Índigo Intenso — Anima/Anímico: Intuição; Sombra: Ilusões; Personalidade: Pragmatismo. ')
-st.write('36. Verde Pastel — Anima/Anímico: Inspiração; Sombra: Imobilidade; Personalidade: Iniciativa. ')
-st.write('37. Azul Vibrante — Anima/Anímico: Expressão; Sombra: Melancolia; Personalidade: Autoencorajamento. ')
-st.write('38. Amarelo Quente — Anima/Anímico: Entusiasmo; Sombra: Sensibilidade Excessiva; Personalidade: Autocomando. ')
-st.write('39. Lilás Pálido — Anima/Anímico: Admiração; Sombra: Preconceito; Personalidade: Abertura. ')
-st.write('40. Bege Suave — Anima/Anímico: Simplicidade; Sombra: Inautenticidade; Personalidade: Autenticidade. ')
-st.write('41. Turquesa Neutro — Anima/Anímico: Desprendimento; Sombra: Intensidade Excessiva; Personalidade: Equilíbrio. ')
-st.write('42. Cinza Profundo — Anima/Anímico: Conhecimento; Sombra: Falta de Foco; Personalidade: Concentração. ')
-st.write('43. Branco Puro — Anima/Anímico: Transcendência; Sombra: Enganar-se; Personalidade: Autoaceitação. ')
-st.write('44. Azul Sereno — Anima/Anímico: Calma; Sombra: Indiferença; Personalidade: Sensibilidade. ')
-st.write('45. Verde Musgo — Anima/Anímico: Natureza; Sombra: Desapego Excessivo; Personalidade: Comprometimento.')
+    st.subheader("Cor Mais Próxima do Dicionário")
+    st.write(cores[cor_mais_proxima]['cor'])
+    st.write(f"RGB: {cores[cor_mais_proxima]['rgb']}")

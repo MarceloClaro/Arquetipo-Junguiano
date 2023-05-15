@@ -455,7 +455,7 @@ if imagem is not None:
     pixels = imagem_redimensionada.reshape(-1, 3)
 
     # Realizar a clusterização dos pixels
-    kmeans = KMeans(n_clusters=5)
+    kmeans = KMeans(n_clusters=1)
     kmeans.fit(pixels)
 
     # Encontrar a cor dominante

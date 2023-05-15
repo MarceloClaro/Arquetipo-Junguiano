@@ -340,11 +340,90 @@ cores_junguianas = {
         'sombra': 'Isolamento',
         'personalidade': 'Comunidade',
         'diagnostico': 'Ao utilizar o Marrom Quente em suas telas, você traz uma sensação de conexão e pertencimento à sua expressão artística. Essa cor carrega a mensagem de comunidade, incentivando-o a compartilhar sua arte e a se conectar com outros artistas e apreciadores da arte.'
+    },
+    '41': {
+        'cor': 'Roxo Profundo',
+        'rgb': (128, 0, 128),
+        'anima_animico': 'Transcendência',
+        'sombra': 'Obstinação',
+        'personalidade': 'Flexibilidade',
+        'diagnostico': 'Ao pintar com Roxo Profundo, você evoca uma sensação de transcendência e espiritualidade em sua arte. Essa cor transmite a mensagem de flexibilidade, incentivando-o a se adaptar às mudanças e explorar diferentes perspectivas em sua expressão artística.'
+    },
+    '42': {
+        'cor': 'Ciano Vivo',
+        'rgb': (0, 255, 255),
+        'anima_animico': 'Expansão',
+        'sombra': 'Desfoque',
+        'personalidade': 'Foco',
+        'diagnostico': 'Ao utilizar o Ciano Vivo em suas telas, você traz uma energia de expansão e liberdade à sua expressão artística. Essa cor carrega a mensagem de foco, convidando-o a manter a clareza e direção em sua arte, evitando distrações e desfoque.'
+    },
+    '43': {
+        'cor': 'Amarelo Esmeralda',
+        'rgb': (154, 205, 50),
+        'anima_animico': 'Crescimento',
+        'sombra': 'Inconstância',
+        'personalidade': 'Persistência',
+        'diagnostico': 'Quando você pinta com Amarelo Esmeralda, traz uma energia de crescimento e renovação à sua arte. Essa cor transmite a mensagem de persistência, incentivando-o a continuar desenvolvendo e aprimorando suas habilidades artísticas.'
+    },
+    '44': {
+        'cor': 'Laranja Brilhante',
+        'rgb': (255, 165, 0),
+        'anima_animico': 'Entusiasmo',
+        'sombra': 'Impaciência',
+        'personalidade': 'Equilíbrio',
+        'diagnostico': 'A cor Laranja Brilhante em seu processo de pintura representa entusiasmo e criatividade vibrantes. Ela convida você a abraçar sua criança interior e expressar-se com alegria e sabedoria, buscando o equilíbrio em suas emoções e ações artísticas.'
+    },
+    '45': {
+        'cor': 'Verde Esmeralda',
+        'rgb': (0, 201, 87),
+        'anima_animico': 'Harmonia',
+        'sombra': 'Indecisão',
+        'personalidade': 'Resolução',
+        'diagnostico': 'Ao pintar com Verde Esmeralda, você traz uma sensação de harmonia e equilíbrio à sua expressão artística. Essa cor carrega a mensagem de resolução, convidando-o a tomar decisões firmes e a se comprometer com sua visão artística.'
+    },
+    '46': {
+        'cor': 'Turquesa Brilhante',
+        'rgb': (64, 224, 208),
+        'anima_animico': 'Energia',
+        'sombra': 'Impaciência',
+        'personalidade': 'Paciência',
+        'diagnostico': 'Ao pintar com Turquesa Brilhante, você traz uma energia vibrante e estimulante à sua tela. Essa cor transmite uma mensagem de equilíbrio entre a energia criativa e a paciência necessária para desenvolver sua expressão artística de forma completa e satisfatória.'
+    },
+    '47': {
+        'cor': 'Rosa Encantador',
+        'rgb': (255, 105, 180),
+        'anima_animico': 'Amor',
+        'sombra': 'Insegurança',
+        'personalidade': 'Autoaceitação',
+        'diagnostico': 'Ao utilizar o Rosa Encantador em suas telas, você evoca uma energia de amor e compaixão em sua expressão artística. Essa cor carrega a mensagem de autoaceitação, convidando-o a amar e valorizar sua própria arte, superando qualquer insegurança.'
+    },
+    '48': {
+        'cor': 'Azul Celeste',
+        'rgb': (135, 206, 250),
+        'anima_animico': 'Leveza',
+        'sombra': 'Inconstância',
+        'personalidade': 'Estabilidade',
+        'diagnostico': 'A cor Azul Celeste em sua pintura representa uma sensação de leveza e tranquilidade. Sua mensagem é de estabilidade emocional, convidando-o a encontrar equilíbrio e constância em seu processo artístico, mesmo diante das mudanças e desafios.'
+    },
+    '49': {
+        'cor': 'Dourado Radiante',
+        'rgb': (255, 223, 0),
+        'anima_animico': 'Prosperidade',
+        'sombra': 'Ganância',
+        'personalidade': 'Gratidão',
+        'diagnostico': 'Ao pintar com Dourado Radiante, você evoca uma energia de prosperidade e abundância em sua arte. Essa cor carrega a mensagem de gratidão, convidando-o a valorizar e apreciar todas as conquistas e oportunidades que a arte proporciona.'
+    },
+    '50': {
+        'cor': 'Vermelho Ardente',
+        'rgb': (255, 0, 0),
+        'anima_animico': 'Paixão',
+        'sombra': 'Impulsividade',
+        'personalidade': 'Equilíbrio',
+        'diagnostico': 'Quando você utiliza o Vermelho Ardente em suas telas, traz uma energia apaixonada e intensa à sua expressão artística. Sua mensagem é de encontrar equilíbrio entre a paixão criativa e a capacidade de manter-se centrado e em controle.'
     }
 }
 
-
-
+    
 # Configurações do aplicativo Streamlit
 st.image("clube.png")  # Adiciona a imagem no topo do app
 st.title("Análise de Cor Dominante das Pinturas de Telas")

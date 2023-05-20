@@ -19,7 +19,6 @@ def encontrar_cor_mais_proxima(rgb):
 
 # Carregar o dicionário com as cores junguianas
 
-
 cores_junguianas = {
     '1': {
         'cor': 'Vermelho Vivo',
@@ -340,103 +339,14 @@ cores_junguianas = {
         'sombra': 'Isolamento',
         'personalidade': 'Comunidade',
         'diagnostico': 'Ao utilizar o Marrom Quente em suas telas, você traz uma sensação de conexão e pertencimento à sua expressão artística. Essa cor carrega a mensagem de comunidade, incentivando-o a compartilhar sua arte e a se conectar com outros artistas e apreciadores da arte.'
-    },
-    '41': {
-        'cor': 'Roxo Profundo',
-        'rgb': (128, 0, 128),
-        'anima_animico': 'Transcendência',
-        'sombra': 'Obstinação',
-        'personalidade': 'Flexibilidade',
-        'diagnostico': 'Ao pintar com Roxo Profundo, você evoca uma sensação de transcendência e espiritualidade em sua arte. Essa cor transmite a mensagem de flexibilidade, incentivando-o a se adaptar às mudanças e explorar diferentes perspectivas em sua expressão artística.'
-    },
-    '42': {
-        'cor': 'Ciano Vivo',
-        'rgb': (0, 255, 255),
-        'anima_animico': 'Expansão',
-        'sombra': 'Desfoque',
-        'personalidade': 'Foco',
-        'diagnostico': 'Ao utilizar o Ciano Vivo em suas telas, você traz uma energia de expansão e liberdade à sua expressão artística. Essa cor carrega a mensagem de foco, convidando-o a manter a clareza e direção em sua arte, evitando distrações e desfoque.'
-    },
-    '43': {
-        'cor': 'Amarelo Esmeralda',
-        'rgb': (154, 205, 50),
-        'anima_animico': 'Crescimento',
-        'sombra': 'Inconstância',
-        'personalidade': 'Persistência',
-        'diagnostico': 'Quando você pinta com Amarelo Esmeralda, traz uma energia de crescimento e renovação à sua arte. Essa cor transmite a mensagem de persistência, incentivando-o a continuar desenvolvendo e aprimorando suas habilidades artísticas.'
-    },
-    '44': {
-        'cor': 'Laranja Brilhante',
-        'rgb': (255, 165, 0),
-        'anima_animico': 'Entusiasmo',
-        'sombra': 'Impaciência',
-        'personalidade': 'Equilíbrio',
-        'diagnostico': 'A cor Laranja Brilhante em seu processo de pintura representa entusiasmo e criatividade vibrantes. Ela convida você a abraçar sua criança interior e expressar-se com alegria e sabedoria, buscando o equilíbrio em suas emoções e ações artísticas.'
-    },
-    '45': {
-        'cor': 'Verde Esmeralda',
-        'rgb': (0, 201, 87),
-        'anima_animico': 'Harmonia',
-        'sombra': 'Indecisão',
-        'personalidade': 'Resolução',
-        'diagnostico': 'Ao pintar com Verde Esmeralda, você traz uma sensação de harmonia e equilíbrio à sua expressão artística. Essa cor carrega a mensagem de resolução, convidando-o a tomar decisões firmes e a se comprometer com sua visão artística.'
-    },
-    '46': {
-        'cor': 'Turquesa Brilhante',
-        'rgb': (64, 224, 208),
-        'anima_animico': 'Energia',
-        'sombra': 'Impaciência',
-        'personalidade': 'Paciência',
-        'diagnostico': 'Ao pintar com Turquesa Brilhante, você traz uma energia vibrante e estimulante à sua tela. Essa cor transmite uma mensagem de equilíbrio entre a energia criativa e a paciência necessária para desenvolver sua expressão artística de forma completa e satisfatória.'
-    },
-    '47': {
-        'cor': 'Rosa Encantador',
-        'rgb': (255, 105, 180),
-        'anima_animico': 'Amor',
-        'sombra': 'Insegurança',
-        'personalidade': 'Autoaceitação',
-        'diagnostico': 'Ao utilizar o Rosa Encantador em suas telas, você evoca uma energia de amor e compaixão em sua expressão artística. Essa cor carrega a mensagem de autoaceitação, convidando-o a amar e valorizar sua própria arte, superando qualquer insegurança.'
-    },
-    '48': {
-        'cor': 'Azul Celeste',
-        'rgb': (135, 206, 250),
-        'anima_animico': 'Leveza',
-        'sombra': 'Inconstância',
-        'personalidade': 'Estabilidade',
-        'diagnostico': 'A cor Azul Celeste em sua pintura representa uma sensação de leveza e tranquilidade. Sua mensagem é de estabilidade emocional, convidando-o a encontrar equilíbrio e constância em seu processo artístico, mesmo diante das mudanças e desafios.'
-    },
-    '49': {
-        'cor': 'Dourado Radiante',
-        'rgb': (255, 223, 0),
-        'anima_animico': 'Prosperidade',
-        'sombra': 'Ganância',
-        'personalidade': 'Gratidão',
-        'diagnostico': 'Ao pintar com Dourado Radiante, você evoca uma energia de prosperidade e abundância em sua arte. Essa cor carrega a mensagem de gratidão, convidando-o a valorizar e apreciar todas as conquistas e oportunidades que a arte proporciona.'
-    },
-    '50': {
-        'cor': 'Vermelho Ardente',
-        'rgb': (255, 0, 0),
-        'anima_animico': 'Paixão',
-        'sombra': 'Impulsividade',
-        'personalidade': 'Equilíbrio',
-        'diagnostico': 'Quando você utiliza o Vermelho Ardente em suas telas, traz uma energia apaixonada e intensa à sua expressão artística. Sua mensagem é de encontrar equilíbrio entre a paixão criativa e a capacidade de manter-se centrado e em controle.'
     }
 }
 
-    
+
 # Configurações do aplicativo Streamlit
-st.image("clube.png")  # Adiciona a imagem no topo do app
-st.title("Análise de Cor Dominante das Pinturas de Telas")
-st.write("""
-Este aplicativo é uma ferramenta extremamente valiosa para o clube de artes plásticas e seus alunos. Através da análise de cor dominante em pinturas, os estudantes podem aprofundar seu entendimento sobre a influência das cores na expressão artística e como elas podem ser usadas para transmitir emoções e mensagens específicas. Além disso, a correspondência das cores com o dicionário de cores junguianas permite uma exploração mais profunda dos aspectos psicológicos das cores na arte.
-
-A pintura em tela é uma forma de arte que permite uma grande variedade de técnicas e expressões criativas. Cada escolha de cor tem um significado e uma intenção por trás, e entender isso pode ajudar os artistas a criar obras mais expressivas e significativas. Ao usar este aplicativo, os alunos podem analisar suas próprias pinturas e entender melhor como suas escolhas de cores podem influenciar a interpretação e a recepção de suas obras.
-
-Além disso, este aplicativo pode ser uma ferramenta educacional útil. Os professores podem usá-lo para ensinar os alunos sobre a teoria das cores e a psicologia das cores na arte. Ele pode ser usado para demonstrar em tempo real como diferentes cores podem alterar a percepção de uma pintura e como as cores podem ser usadas para transmitir diferentes emoções e significados.
-
-Em resumo, este aplicativo pode enriquecer o processo de aprendizagem dos alunos, permitindo que eles explorem a complexa relação entre cores e emoções na arte de pintar. Também pode ser uma valiosa ferramenta de auto-reflexão, permitindo que os artistas entendam melhor suas próprias escolhas criativas e como elas afetam o impacto de suas obras.
-""")
+st.title("Análise de Cor Dominante")
 st.write("Carregue uma imagem e descubra a cor dominante e sua correspondência no dicionário de cores junguianas.")
+
 # Carregar a imagem
 imagem = st.file_uploader("Selecione uma imagem", type=['jpg', 'jpeg', 'png'])
 
@@ -455,7 +365,7 @@ if imagem is not None:
     pixels = imagem_redimensionada.reshape(-1, 3)
 
     # Realizar a clusterização dos pixels
-    kmeans = KMeans(n_clusters=1)
+    kmeans = KMeans(n_clusters=5)
     kmeans.fit(pixels)
 
     # Encontrar a cor dominante
@@ -476,103 +386,21 @@ if imagem is not None:
     st.image(imagem_segmentada, caption="Imagem Segmentada do Cluster", use_column_width=True)
 
 
-    # Variáveis do usuário
-    tema = st.text_input("Tema da Pintura")
-    nome_obra = st.text_input("Nome da Obra")
-    tecnica = st.text_input("Técnica Utilizada")
-    dimensoes = st.text_input("Dimensões da Tela")
-    idade = st.number_input("Idade do Artista", min_value=0, max_value=100)
-    artista_referencia = st.text_input("Artista de Referência")
-    estilo_artistico = st.text_input("Estilo Artístico")
-    elemento_retratado = st.text_input("Elemento Retratado")
-    descricao_figura = st.text_input("Descrição da Figura")
-    genero_figura = st.text_input("Gênero da Figura")
-    descricao_ambiente = st.text_input("Descrição do Ambiente")
-    cor_dominante = cor_proxima["cor"]
-    descricao_tecnicas = st.text_input("Descrição das Técnicas Utilizadas")
-    arquetipo_junguiano = cor_proxima["anima_animico"]
-    sombra = cor_proxima["sombra"]
-    local_sombra = st.text_input("Local da Sombra")
-    interpretacao_sombra = st.text_input("Interpretação da Sombra")
-    cor_correspondente_sombra = cor_proxima["cor"]
-    local_personalidade = st.text_input("Local da Personalidade")
-    interpretacao_personalidade = st.text_input("Interpretação da Personalidade")
-    contexto_relevante = st.text_input("Contexto Relevante")
+# Título do app
+st.title("Análise de Pintura")
 
-    # Definição do template
-    texto_template = """
-    Tema: {tema}
-    
-    Nome da Obra: {nome_obra}
-    
-    Técnica Utilizada: {tecnica}
-    
-    Dimensões da Tela: {dimensoes}
-    
-    Idade do Artista: {idade}
-    
-    Artista de Referência: {artista_referencia}
-    
-    Estilo Artístico: {estilo_artistico}
+# Template do texto
+texto_template = """Tema: "{tema}"
 
-    Elemento Retratado: {elemento_retratado}
-    
-    Descrição da Figura: {descricao_figura}
-    
-    Gênero da Figura: {genero_figura}
+OBRA: "{nome_obra}"
 
-    Descrição do Ambiente: {descricao_ambiente}
-    
-    Cor Dominante: {cor_dominante}
+A curadoria da pintura, "{nome_obra}", é um trabalho de {tecnica} sobre tela de {dimensoes} criado por um artista de {idade} anos inspirado no estilo artístico semelhante ao de {artista_referencia}, pintor {estilo_artistico}. O artista apresenta sua própria visão da {elemento_retratado}, retratando {descricao_figura}, enquanto {genero_figura} observa {descricao_ambiente}, envolvida por uma aura {cor_dominante}.
 
-    Descrição das Técnicas Utilizadas: {descricao_tecnicas}
+O processo criativo do artista envolveu {descricao_tecnicas}, aplicando essas técnicas à sua própria pintura de {elemento_retratado}. Essa obra faz parte das obras "{tema}" do artista, demonstrando uma visão e paixão pela arte desde uma idade jovem.
 
-    Arquétipo Junguiano: {arquetipo_junguiano}
+Extraindo a cor dominante do quadro, {cor_dominante}, podemos analisar os arquétipos junguianos presentes na obra. A cor {cor_dominante} está associada ao {arquetipo_junguiano}, refletindo a conexão do {elemento_retratado} com o arquétipo. A sombra é representada pela cor {sombra} presente {local_sombra}, simbolizando {interpretacao_sombra}. A personalidade é representada pela cor {cor_correspondente_sombra} do {local_personalidade}, simbolizando {interpretacao_personalidade}.
 
-    Sombra: {sombra}
-    
-    Local da Sombra: {local_sombra}
-    
-    Interpretação da Sombra: {interpretacao_sombra}
-    
-    Cor Correspondente à Sombra: {cor_correspondente_sombra}
+Essa obra tem relevância social e histórica, retratando {contexto_relevante}. Além disso, a arte contemporânea utiliza uma temática atemporal para se conectar com as audiências modernas. Essa obra pode ser apreciada não apenas em galerias físicas, mas também em galerias virtuais com experiência VR, tornando a arte acessível a todos.
 
-    Local da Personalidade: {local_personalidade}
-    
-    Interpretação da Personalidade: {interpretacao_personalidade}
-    
-    Contexto Relevante: {contexto_relevante}
-    """
-
-    # Preenchendo o template com as variáveis do usuário
-    texto_final = texto_template.format(
-        tema=tema,
-        nome_obra=nome_obra,
-        tecnica=tecnica,
-        dimensoes=dimensoes,
-        idade=idade,
-        artista_referencia=artista_referencia,
-        estilo_artistico=estilo_artistico,
-        elemento_retratado=elemento_retratado,
-        descricao_figura=descricao_figura,
-        genero_figura=genero_figura,
-        descricao_ambiente=descricao_ambiente,
-        cor_dominante=cor_dominante,
-        descricao_tecnicas=descricao_tecnicas,
-        arquetipo_junguiano=arquetipo_junguiano,
-        sombra=sombra,
-        local_sombra=local_sombra,
-        interpretacao_sombra=interpretacao_sombra,
-        cor_correspondente_sombra=cor_correspondente_sombra,
-        local_personalidade=local_personalidade,
-        interpretacao_personalidade=interpretacao_personalidade,
-        contexto_relevante=contexto_relevante
-    )
-
-    # Exibindo o texto final
-    st.subheader("Texto Final")
-    st.write(texto_final)
-
-
-
-
+A pintura "{nome_obra}" é uma peça impressionante de um jovem artista promissor que demonstra uma habilidade notável em retratar {elemento_retratado}. É uma obra que certamente merece ser apreciada e analisada mais profundamente.
+"""

@@ -386,12 +386,13 @@ if imagem is not None:
     st.image(imagem_segmentada, caption="Imagem Segmentada do Cluster", use_column_width=True)
 
 
-# Título do app
-st.title("Análise de Pintura")
+
 
 # Template do texto
-texto_template = """Tema: "{tema}"
 
+texto_template = """Tema: "{tema}"
+# Título do app
+"Análise de Pintura"
 OBRA: "{nome_obra}"
 
 A curadoria da pintura, "{nome_obra}", é um trabalho de {tecnica} sobre tela de {dimensoes} criado por um artista de {idade} anos inspirado no estilo artístico semelhante ao de {artista_referencia}, pintor {estilo_artistico}. O artista apresenta sua própria visão da {elemento_retratado}, retratando {descricao_figura}, enquanto {genero_figura} observa {descricao_ambiente}, envolvida por uma aura {cor_dominante}.

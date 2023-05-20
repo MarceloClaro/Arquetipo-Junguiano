@@ -1,407 +1,122 @@
-import streamlit as st
-import numpy as np
-from PIL import Image
-from sklearn.cluster import KMeans
-from scipy.spatial import distance
+import numpy as np  
+import cv2  
+from sklearn.cluster import KMeans  
+from sklearn.utils import shuffle  
+import streamlit as st  
+from PIL import Image  
+import io  
 
-# Função para encontrar a cor mais próxima no dicionário
-def encontrar_cor_mais_proxima(rgb):
-    cor_mais_proxima = None
-    menor_distancia = float('inf')
 
-    for chave, valor in cores_junguianas.items():
-        distancia_cor = distance.euclidean(rgb, valor['rgb'])
-        if distancia_cor < menor_distancia:
-            menor_distancia = distancia_cor
-            cor_mais_proxima = valor
+class Canvas():
+    def __init__(self, src, nb_color, pixel_size=4000):
+        self.src = cv2.cvtColor(src, cv2.COLOR_BGR2RGB)  
+        self.nb_color = nb_color
+        self.tar_width = pixel_size
+        self.colormap = []
 
-    return cor_mais_proxima
+    def generate(self):
+        # Métodos aplicados na imagem
+        im_source = self.resize()
+        clean_img = self.cleaning(im_source)
+        width, height, depth = clean_img.shape
+        clean_img = np.array(clean_img, dtype="uint8") / 255
+        quantified_image, colors = self.quantification(clean_img)
+        canvas = np.ones(quantified_image.shape[:2], dtype="uint8") * 255
 
-# Carregar o dicionário com as cores junguianas
+        # Encontrando contornos e aplicando texto
+        for ind, color in enumerate(colors):
+            self.colormap.append([int(c * 255) for c in color])
+            mask = cv2.inRange(quantified_image, color, color)
+            cnts = cv2.findContours(mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+            cnts = cnts[0] if len(cnts) == 2 else cnts[1]
 
-cores_junguianas = {
-    '1': {
-        'cor': 'Vermelho Vivo',
-        'rgb': (255, 0, 0),
-        'anima_animico': 'Vitalidade',
-        'sombra': 'Impulsividade',
-        'personalidade': 'Autocontrole',
-        'diagnostico': 'No processo de pintura de tela, o Vermelho Vivo representa uma expressão intensa de energia e paixão. Sua mensagem é de vitalidade e autenticidade, encorajando a expressão livre de emoções.'
-    },
-    '2': {
-        'cor': 'Rosa Brilhante',
-        'rgb': (255, 105, 180),
-        'anima_animico': 'Abundância',
-        'sombra': 'Propensão ao Excesso',
-        'personalidade': 'Equilíbrio',
-        'diagnostico': 'Ao pintar com o Rosa Brilhante, você traz uma sensação de abundância e gratidão à sua tela. A mensagem transmitida por essa cor é de equilíbrio emocional e alegria na expressão artística.'
-    },
-    '3': {
-        'cor': 'Laranja Ardente',
-        'rgb': (255, 140, 0),
-        'anima_animico': 'Entusiasmo',
-        'sombra': 'Imaturidade',
-        'personalidade': 'Sabedoria',
-        'diagnostico': 'A cor Laranja Ardente em seu processo de pintura representa entusiasmo e criatividade vibrantes. Ela convida você a abraçar sua criança interior e expressar-se com alegria e sabedoria.'
-    },
-    '4': {
-        'cor': 'Magenta Vibrante',
-        'rgb': (255, 0, 255),
-        'anima_animico': 'Criatividade',
-        'sombra': 'Contrariedade',
-        'personalidade': 'Flexibilidade',
-        'diagnostico': 'Quando você pinta com Magenta Vibrante, está canalizando sua criatividade e expressão artística única. Essa cor traz uma mensagem de flexibilidade e adaptabilidade diante dos desafios.'
-    },
-    '5': {
-        'cor': 'Índigo Profundo',
-        'rgb': (75, 0, 130),
-        'anima_animico': 'Intuição',
-        'sombra': 'Dúvida',
-        'personalidade': 'Inteligência',
-        'diagnostico': 'O Índigo Profundo em sua tela reflete uma conexão profunda com sua intuição e sabedoria interior. Essa cor carrega uma mensagem de confiança e inteligência na manifestação de sua expressão artística.'
-    },
-    '6': {
-        'cor': 'Verde Claro',
-        'rgb': (0, 255, 0),
-        'anima_animico': 'Renovação',
-        'sombra': 'Insegurança',
-        'personalidade': 'Autoconfiança',
-        'diagnostico': 'Quando você pinta com Verde Claro, está trazendo uma sensação de renovação e crescimento à sua expressão artística. Essa cor transmite uma mensagem de autoconfiança, encorajando você a se expressar livremente e acreditar em seu próprio potencial criativo.'
-    },
-    '7': {
-        'cor': 'Azul Elétrico',
-        'rgb': (0, 0, 255),
-        'anima_animico': 'Liberdade',
-        'sombra': 'Desordem',
-        'personalidade': 'Responsabilidade',
-        'diagnostico': 'Ao utilizar o Azul Elétrico em suas telas, você expressa uma sensação de liberdade e expansão. Essa cor transmite a mensagem de equilíbrio entre a liberdade criativa e a responsabilidade de moldar sua expressão artística de forma consciente.'
-    },
-    '8': {
-        'cor': 'Amarelo Solar',
-        'rgb': (255, 255, 0),
-        'anima_animico': 'Otimismo',
-        'sombra': 'Negatividade',
-        'personalidade': 'Intencionalidade',
-        'diagnostico': 'O Amarelo Solar em sua pintura traz uma energia otimista e iluminada. Sua mensagem é de positividade e intencionalidade, convidando-o a expressar sua arte com alegria e propósito.'
-    },
-    '9': {
-        'cor': 'Lilás Suave',
-        'rgb': (204, 153, 255),
-        'anima_animico': 'Humildade',
-        'sombra': 'Inadaptabilidade',
-        'personalidade': 'Adaptabilidade',
-        'diagnostico': 'Ao utilizar o Lilás Suave em suas telas, você traz uma sensação de humildade e suavidade à sua expressão artística. Essa cor carrega a mensagem de adaptabilidade e abertura às transformações que ocorrem durante o processo de pintura.'
-    },
-    '10': {
-        'cor': 'Castanho Neutro',
-        'rgb': (139, 69, 19),
-        'anima_animico': 'Estabilidade',
-        'sombra': 'Estagnação',
-        'personalidade': 'Evolução',
-        'diagnostico': 'A cor Castanho Neutro em sua pintura representa uma sensação de estabilidade e segurança. Sua mensagem é de evolução contínua, incentivando a busca por novas perspectivas e o crescimento artístico.'
-    },
-    '11': {
-        'cor': 'Turquesa Brilhante',
-        'rgb': (0, 255, 255),
-        'anima_animico': 'Energia',
-        'sombra': 'Impaciência',
-        'personalidade': 'Paciência',
-        'diagnostico': 'Quando você pinta com Turquesa Brilhante, está trazendo uma energia vibrante e estimulante à sua tela. Essa cor transmite uma mensagem de equilíbrio entre a energia criativa e a paciência necessária para desenvolver sua expressão artística de forma completa e satisfatória.'
-    },
-    '12': {
-        'cor': 'Cinza Algo',
-        'rgb': (128, 128, 128),
-        'anima_animico': 'Introversão',
-        'sombra': 'Desalinho',
-        'personalidade': 'Clareza',
-        'diagnostico': 'Ao utilizar o Cinza Algo em suas telas, você traz uma atmosfera de introspecção e reflexão. Essa cor carrega a mensagem de encontrar clareza e foco em meio à desordem, incentivando uma expressão artística alinhada com sua verdade interior.'
-    },
-    '13': {
-        'cor': 'Branco Radiante',
-        'rgb': (255, 255, 255),
-        'anima_animico': 'Pureza',
-        'sombra': 'Falsidade',
-        'personalidade': 'Honradez',
-        'diagnostico': 'O Branco Radiante em seu processo de pintura representa pureza e autenticidade. Sua mensagem é de honradez na expressão artística, encorajando você a pintar com sinceridade e verdade, evitando qualquer falsidade.'
-    },
-    '14': {
-        'cor': 'Azul Escuro',
-        'rgb': (0, 0, 128),
-        'anima_animico': 'Segurança',
-        'sombra': 'Desconfiança',
-        'personalidade': 'Tranquilidade',
-        'diagnostico': 'Ao utilizar o Azul Escuro em suas telas, você transmite uma sensação de segurança e tranquilidade. Essa cor carrega a mensagem de confiança na expressão artística, permitindo-se mergulhar nas profundezas da criatividade com confiança e serenidade.'
-    },
-    '15': {
-        'cor': 'Verde Escuro',
-        'rgb': (0, 100, 0),
-        'anima_animico': 'Estoicismo',
-        'sombra': 'Frialdade',
-        'personalidade': 'Afetuosidade',
-        'diagnostico': 'Quando você pinta com Verde Escuro, está explorando um senso de estoicismo e serenidade em sua expressão artística. Essa cor transmite a mensagem de equilibrar a frieza com a afetuosidade, resultando em obras cheias de serenidade e profundidade emocional.'
-    },
-    '16': {
-        'cor': 'Laranja Avermelhado',
-        'rgb': (255, 69, 0),
-        'anima_animico': 'Envolvimento',
-        'sombra': 'Insegurança',
-        'personalidade': 'Confiança',
-        'diagnostico': 'Ao utilizar o Laranja Avermelhado em suas telas, você traz um senso de envolvimento e paixão à sua expressão artística. Essa cor transmite uma mensagem de confiança em si mesmo, encorajando-o a se entregar completamente ao processo criativo e expressar suas emoções e ideias sem medo ou insegurança.'
-    },
-    '17': {
-        'cor': 'Rosa Calorosa',
-        'rgb': (255, 192, 203),
-        'anima_animico': 'Carinho',
-        'sombra': 'Medo',
-        'personalidade': 'Coragem',
-        'diagnostico': 'Ao pintar com Rosa Calorosa, você traz uma energia de carinho e amor à sua tela. Essa cor carrega a mensagem de coragem, convidando-o a se expressar de forma amorosa e gentil através de sua arte, superando qualquer medo que possa surgir.'
-    },
-    '18': {
-        'cor': 'Vermelho Oculto',
-        'rgb': (139, 0, 0),
-        'anima_animico': 'Força',
-        'sombra': 'Ira',
-        'personalidade': 'Autocontrole',
-        'diagnostico': 'Quando você utiliza o Vermelho Oculto em suas telas, traz à tona uma energia poderosa e intensa. Sua mensagem é de força interior e autocontrole, incentivando você a expressar suas emoções com equilíbrio e assertividade, evitando ser dominado pela ira.'
-    },
-    '19': {
-        'cor': 'Magenta Escuro',
-        'rgb': (139, 0, 139),
-        'anima_animico': 'Profundidade',
-        'sombra': 'Desespero',
-        'personalidade': 'Esperança',
-        'diagnostico': 'Ao pintar com Magenta Escuro, você explora as camadas mais profundas de emoção em sua arte. Essa cor carrega a mensagem de encontrar esperança e significado mesmo nas situações mais desafiadoras, superando o desespero e permitindo que a esperança brilhe.'
-    },
-    '20': {
-        'cor': 'Índigo Vintage',
-        'rgb': (75, 0, 130),
-        'anima_animico': 'Consciência',
-        'sombra': 'Desesperança',
-        'personalidade': 'Fé',
-        'diagnostico': 'Ao utilizar o Índigo Vintage em suas telas, você evoca uma consciência profunda e espiritual em sua expressão artística. Essa cor transmite a mensagem de fé e confiança no processo criativo, inspirando-o a pintar com significado e propósito, mesmo em momentos de desesperança.'
-    },
-    '21': {
-        'cor': 'Verde Menta',
-        'rgb': (152, 251, 152),
-        'anima_animico': 'Calma',
-        'sombra': 'Desânimo',
-        'personalidade': 'Perseverança',
-        'diagnostico': 'Quando você pinta com Verde Menta, traz uma sensação de calma e tranquilidade à sua expressão artística. Essa cor transmite a mensagem de perseverança, incentivando você a persistir em sua jornada artística mesmo diante dos desafios e momentos de desânimo.'
-    },
-    '22': {
-        'cor': 'Azul Petróleo',
-        'rgb': (0, 128, 128),
-        'anima_animico': 'Liderança',
-        'sombra': 'Rigidez',
-        'personalidade': 'Suavidade',
-        'diagnostico': 'Ao utilizar o Azul Petróleo em suas telas, você evoca uma energia de liderança e autoridade na sua expressão artística. Essa cor carrega a mensagem de suavidade e flexibilidade, incentivando uma abordagem harmoniosa e receptiva em sua arte.'
-    },
-    '23': {
-        'cor': 'Amarelo Luminoso',
-        'rgb': (255, 255, 102),
-        'anima_animico': 'Alegria',
-        'sombra': 'Ansiedade',
-        'personalidade': 'Autogoverno',
-        'diagnostico': 'Quando você pinta com Amarelo Luminoso, está trazendo uma energia de alegria e otimismo à sua tela. Essa cor transmite a mensagem de autogoverno, convidando-o a expressar sua arte com confiança e leveza, superando a ansiedade.'
-    },
-    '24': {
-        'cor': 'Lilás Atrevido',
-        'rgb': (153, 50, 204),
-        'anima_animico': 'Intriga',
-        'sombra': 'Preconceito',
-        'personalidade': 'Respeito',
-        'diagnostico': 'Ao utilizar o Lilás Atrevido em suas telas, você traz uma sensação de intriga e curiosidade à sua expressão artística. Essa cor carrega a mensagem de respeito, incentivando-o a abraçar a diversidade e a explorar diferentes perspectivas em sua arte.'
-    },
-    '25': {
-        'cor': 'Marrom Neutro',
-        'rgb': (139, 69, 19),
-        'anima_animico': 'Praticidade',
-        'sombra': 'Comodismo',
-        'personalidade': 'Determinação',
-        'diagnostico': 'Ao utilizar o Marrom Neutro em suas telas, você traz uma sensação de praticidade e estabilidade à sua expressão artística. Essa cor carrega a mensagem de determinação, convidando-o a se comprometer com seu processo criativo e superar o comodismo.'
-    },
-    '26': {
-        'cor': 'Turquesa Refinado',
-        'rgb': (64, 224, 208),
-        'anima_animico': 'Gratidão',
-        'sombra': 'Resentimento',
-        'personalidade': 'Agradecimento',
-        'diagnostico': 'Ao pintar com Turquesa Refinado, você expressa uma profunda gratidão em sua arte. Essa cor transmite a mensagem de agradecimento, convidando-o a apreciar e valorizar o processo criativo, superando qualquer sentimento de ressentimento.'
-    },
-    '27': {
-        'cor': 'Cinza Confiante',
-        'rgb': (128, 128, 128),
-        'anima_animico': 'Resiliência',
-        'sombra': 'Hiperestimulação',
-        'personalidade': 'Autorespeito',
-        'diagnostico': 'Ao utilizar o Cinza Confiante em suas telas, você evoca uma energia de resiliência e autodeterminação em sua expressão artística. Essa cor carrega a mensagem de autorespeito, incentivando-o a cuidar de si mesmo e a encontrar um equilíbrio saudável em seu processo criativo.'
-    },
-    '28': {
-        'cor': 'Branco Clássico',
-        'rgb': (245, 245, 245),
-        'anima_animico': 'Simplicidade',
-        'sombra': 'Conformismo',
-        'personalidade': 'Inovação',
-        'diagnostico': 'Ao utilizar o Branco Clássico em suas telas, você traz uma sensação de simplicidade e pureza à sua expressão artística. Essa cor carrega a mensagem de inovação, convidando-o a explorar novas ideias e abordagens criativas em seu trabalho.'
-    },
-    '29': {
-        'cor': 'Azul Marinho',
-        'rgb': (0, 0, 128),
-        'anima_animico': 'Iniciativa',
-        'sombra': 'Intransigência',
-        'personalidade': 'Aceitação',
-        'diagnostico': 'Quando você pinta com Azul Marinho, está trazendo uma energia de iniciativa e determinação à sua tela. Essa cor transmite a mensagem de aceitação, incentivando-o a abraçar diferentes perspectivas e a ser receptivo às mudanças em seu processo criativo.'
-    },
-    '30': {
-        'cor': 'Verde Vinho',
-        'rgb': (128, 0, 0),
-        'anima_animico': 'Experiência',
-        'sombra': 'Ira reprimida',
-        'personalidade': 'Autocura',
-        'diagnostico': 'Ao utilizar o Verde Vinho em suas telas, você traz uma energia de experiência e transformação à sua expressão artística. Essa cor carrega a mensagem de autocura, convidando-o a explorar e liberar qualquer raiva reprimida por meio da arte.'
-    },
-    '31': {
-        'cor': 'Pêssego Radiante',
-        'rgb': (255, 204, 153),
-        'anima_animico': 'Amizade',
-        'sombra': 'Autossabotagem',
-        'personalidade': 'Autocuidado',
-        'diagnostico': 'Ao pintar com Pêssego Radiante, você traz uma energia de amizade e conexão à sua arte. Essa cor carrega a mensagem de autocuidado, convidando-o a cultivar um relacionamento saudável consigo mesmo e a evitar autossabotagem em seu processo criativo.'
-    },
-    '32': {
-        'cor': 'Rosa Neutro',
-        'rgb': (205, 183, 181),
-        'anima_animico': 'Compaixão',
-        'sombra': 'Submissão',
-        'personalidade': 'Autonomia',
-        'diagnostico': 'Ao utilizar o Rosa Neutro em suas telas, você evoca uma energia de compaixão e empatia em sua expressão artística. Essa cor transmite a mensagem de autonomia, incentivando-o a se expressar com autenticidade e a estabelecer limites saudáveis em seu trabalho.'
-    },
-    '33': {
-        'cor': 'Vermelho Real',
-        'rgb': (227, 38, 54),
-        'anima_animico': 'Paixão',
-        'sombra': 'Entrega Excessiva',
-        'personalidade': 'Equilíbrio',
-        'diagnostico': 'Quando você utiliza o Vermelho Real em suas telas, traz uma energia apaixonada e intensa à sua expressão artística. Sua mensagem é de encontrar equilíbrio entre a paixão criativa e a capacidade de manter-se centrado e em controle.'
-    },
-    '34': {
-        'cor': 'Magenta Radiante',
-        'rgb': (255, 0, 144),
-        'anima_animico': 'Vitalidade',
-        'sombra': 'Desmantelamento',
-        'personalidade': 'Integração',
-        'diagnostico': 'Ao pintar com Magenta Radiante, você traz uma vitalidade e energia intensa à sua arte. Essa cor carrega a mensagem de integração, convidando-o a unificar diferentes aspectos de si mesmo e de sua expressão artística para criar uma obra coesa e significativa.'
-    },
-    '35': {
-        'cor': 'Índigo Intenso',
-        'rgb': (75, 0, 130),
-        'anima_animico': 'Intuição',
-        'sombra': 'Ilusões',
-        'personalidade': 'Pragmatismo',
-        'diagnostico': 'Ao utilizar o Índigo Intenso em suas telas, você evoca uma conexão profunda com sua intuição e sabedoria interior. Essa cor transmite a mensagem de pragmatismo, incentivando-o a abordar sua arte de forma prática e fundamentada.'
-    },
-    '36': {
-        'cor': 'Verde Pastel',
-        'rgb': (0, 128, 0),
-        'anima_animico': 'Inspiração',
-        'sombra': 'Imobilidade',
-        'personalidade': 'Iniciativa',
-        'diagnostico': 'Quando você pinta com Verde Pastel, traz uma energia inspiradora e revigorante à sua arte. Essa cor transmite a mensagem de iniciativa, convidando-o a agir e manifestar sua criatividade de forma ativa, superando qualquer sensação de imobilidade.'
-    },
-    '37': {
-        'cor': 'Azul Sereno',
-        'rgb': (0, 191, 255),
-        'anima_animico': 'Paz',
-        'sombra': 'Desconexão',
-        'personalidade': 'Harmonia',
-        'diagnostico': 'Ao utilizar o Azul Sereno em suas telas, você evoca uma sensação de paz e tranquilidade em sua expressão artística. Essa cor carrega a mensagem de harmonia, convidando-o a se conectar consigo mesmo e com o mundo ao seu redor por meio de sua arte.'
-    },
-    '38': {
-        'cor': 'Amarelo Dourado',
-        'rgb': (255, 215, 0),
-        'anima_animico': 'Iluminação',
-        'sombra': 'Egocentrismo',
-        'personalidade': 'Generosidade',
-        'diagnostico': 'Quando você pinta com Amarelo Dourado, traz uma energia de iluminação e expansão à sua arte. Essa cor transmite a mensagem de generosidade, incentivando-o a compartilhar sua criatividade e a inspirar os outros com sua expressão artística.'
-    },
-    '39': {
-        'cor': 'Lilás Sutil',
-        'rgb': (200, 162, 200),
-        'anima_animico': 'Sensibilidade',
-        'sombra': 'Vulnerabilidade',
-        'personalidade': 'Autenticidade',
-        'diagnostico': 'Ao pintar com Lilás Sutil, você evoca uma sensibilidade e delicadeza em sua arte. Essa cor carrega a mensagem de autenticidade, convidando-o a se expressar com verdade e vulnerabilidade, criando obras que tocam o coração dos espectadores.'
-    },
-    '40': {
-        'cor': 'Marrom Quente',
-        'rgb': (139, 69, 19),
-        'anima_animico': 'Conexão',
-        'sombra': 'Isolamento',
-        'personalidade': 'Comunidade',
-        'diagnostico': 'Ao utilizar o Marrom Quente em suas telas, você traz uma sensação de conexão e pertencimento à sua expressão artística. Essa cor carrega a mensagem de comunidade, incentivando-o a compartilhar sua arte e a se conectar com outros artistas e apreciadores da arte.'
-    }
+            for contour in cnts:
+                _, _, width_ctr, height_ctr = cv2.boundingRect(contour)
+                if width_ctr > 10 and height_ctr > 10 and cv2.contourArea(contour, True) < -100:
+                    cv2.drawContours(canvas, [contour], -1, (0, 0, 0), 1)
+                    txt_x, txt_y = contour[0][0]
+                    cv2.putText(canvas, '{:d}'.format(ind + 1), (txt_x, txt_y + 15),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
+
+        return canvas, colors, quantified_image
+
+    def resize(self):
+        (height, width) = self.src.shape[:2]
+        if height > width:  # modo retrato
+            dim = (int(width * self.tar_width / float(height)), self.tar_width)
+        else:
+            dim = (self.tar_width, int(height * self.tar_width / float(width)))
+        return cv2.resize(self.src, dim, interpolation=cv2.INTER_AREA)
+
+    def cleaning(self, picture):
+        clean_pic = cv2.fastNlMeansDenoisingColored(picture, None, 10, 10, 7, 21)
+        kernel = np.ones((5, 5), np.uint8)
+        img_erosion = cv2.erode(clean_pic, kernel, iterations=1)
+        img_dilation = cv2.dilate(img_erosion, kernel, iterations=1)
+        return img_dilation
+
+    def quantification(self, picture):
+        width, height, depth = picture.shape
+        flattened = np.reshape(picture, (width * height, depth))
+        sample = shuffle(flattened)[:1000]
+        kmeans = KMeans(n_clusters=self.nb_color).fit(sample)
+        labels = kmeans.predict(flattened)
+        new_img = self.recreate_image(kmeans.cluster_centers_, labels, width, height)
+        return new_img, kmeans.cluster_centers_
+
+    def recreate_image(self, codebook, labels, width, height):
+        vfunc = np.vectorize(lambda label: codebook[label])
+        new_img = vfunc(labels)
+        new_img = np.reshape(new_img, (width, height, codebook.shape[1]))
+        return new_img
+
+
+def find_nearest_color(input_color, color_dict):
+    # Convertendo a cor de entrada para Lab
+    input_color = np.uint8([[input_color]])
+    input_color = cv2.cvtColor(input_color, cv2.COLOR_RGB2LAB)
+
+    min_distance = float('inf')
+    nearest_color_name = None
+    nearest_color_value = None
+
+    # Percorrendo o dicionário de cores
+    for color_name, color_value in color_dict.items():
+        # Convertendo a cor do dicionário para Lab
+        dict_color = np.uint8([[color_value]])
+        dict_color = cv2.cvtColor(dict_color, cv2.COLOR_RGB2LAB)
+
+        # Calculando a distância euclidiana
+        distance = cv2.norm(input_color, dict_color)
+
+        # Verificando se a distância é a menor encontrada até agora
+        if distance < min_distance:
+            min_distance = distance
+            nearest_color_name = color_name
+            nearest_color_value = color_value
+
+    return nearest_color_name, nearest_color_value
+
+
+# Dicionário de cores dos arquétipos junguianos
+jung_colors = {
+    'Anima/Animus': [255, 0, 0],  # Exemplo: vermelho
+    'Sombra': [0, 255, 0],  # Exemplo: verde
+    'Personalidade': [0, 0, 255]  # Exemplo: azul
 }
 
+# Upload da imagem
+uploaded_file = st.file_uploader("Escolha uma imagem...", type=['jpg', 'png', 'jpeg'])
+if uploaded_file is not None:
+    image = Image.open(uploaded_file)
 
-# Configurações do aplicativo Streamlit
-st.title("Análise de Cor Dominante")
-st.write("Carregue uma imagem e descubra a cor dominante e sua correspondência no dicionário de cores junguianas.")
+    # Realizando a análise de cores
+    colors_analysis = Canvas(np.array(image), 5)
+    img_canvas, colors, img_quantified = colors_analysis.generate()
 
-# Carregar a imagem
-imagem = st.file_uploader("Selecione uma imagem", type=['jpg', 'jpeg', 'png'])
+    # Encontrando a cor mais próxima para cada cor encontrada na imagem
+    for i, color in enumerate(colors):
+        color_rgb = [int(c * 255) for c in color]
+        nearest_color_name, nearest_color_value = find_nearest_color(color_rgb, jung_colors)
 
-if imagem is not None:
-    # Exibir a imagem carregada
-    imagem_pil = Image.open(imagem)
-    st.image(imagem_pil, caption="Imagem Original", use_column_width=True)
-
-    # Converter a imagem para um array numpy
-    imagem_array = np.array(imagem_pil)
-
-    # Redimensionar a imagem para 100x100 pixels
-    imagem_redimensionada = np.array(imagem_pil.resize((100, 100)))
-
-    # Obter os pixels da imagem redimensionada
-    pixels = imagem_redimensionada.reshape(-1, 3)
-
-    # Realizar a clusterização dos pixels
-    kmeans = KMeans(n_clusters=5)
-    kmeans.fit(pixels)
-
-    # Encontrar a cor dominante
-    cor_dominante = kmeans.cluster_centers_[kmeans.labels_].mean(axis=0).astype(int)
-
-    # Encontrar a cor mais próxima no dicionário
-    cor_proxima = encontrar_cor_mais_proxima(cor_dominante)
-    # Exibir a cor dominante e sua correspondência no dicionário
-    st.subheader("Resultado")
-    st.write(f"Cor Dominante: RGB {cor_dominante}")
-    st.write(f"Cor Correspondente no Dicionário: {cor_proxima['cor']}")
-    st.write(f"Anima/Animico: {cor_proxima['anima_animico']}")
-    st.write(f"Sombra: {cor_proxima['sombra']}")
-    st.write(f"Personalidade: {cor_proxima['personalidade']}")
-    st.write(f"Diagnóstico: {cor_proxima['diagnostico']}")
-    # Exibir a imagem segmentada do cluster
-    imagem_segmentada = cor_dominante.reshape(1, 1, 3)
-    st.image(imagem_segmentada, caption="Imagem Segmentada do Cluster", use_column_width=True)
-
-
-
-
-# Template do texto
-
-texto_template = """Tema: "{tema}"
-# Título do app
-"Análise de Pintura"
-OBRA: "{nome_obra}"
-
-A curadoria da pintura, "{nome_obra}", é um trabalho de {tecnica} sobre tela de {dimensoes} criado por um artista de {idade} anos inspirado no estilo artístico semelhante ao de {artista_referencia}, pintor {estilo_artistico}. O artista apresenta sua própria visão da {elemento_retratado}, retratando {descricao_figura}, enquanto {genero_figura} observa {descricao_ambiente}, envolvida por uma aura {cor_dominante}.
-
-O processo criativo do artista envolveu {descricao_tecnicas}, aplicando essas técnicas à sua própria pintura de {elemento_retratado}. Essa obra faz parte das obras "{tema}" do artista, demonstrando uma visão e paixão pela arte desde uma idade jovem.
-
-Extraindo a cor dominante do quadro, {cor_dominante}, podemos analisar os arquétipos junguianos presentes na obra. A cor {cor_dominante} está associada ao {arquetipo_junguiano}, refletindo a conexão do {elemento_retratado} com o arquétipo. A sombra é representada pela cor {sombra} presente {local_sombra}, simbolizando {interpretacao_sombra}. A personalidade é representada pela cor {cor_correspondente_sombra} do {local_personalidade}, simbolizando {interpretacao_personalidade}.
-
-Essa obra tem relevância social e histórica, retratando {contexto_relevante}. Além disso, a arte contemporânea utiliza uma temática atemporal para se conectar com as audiências modernas. Essa obra pode ser apreciada não apenas em galerias físicas, mas também em galerias virtuais com experiência VR, tornando a arte acessível a todos.
-
-A pintura "{nome_obra}" é uma peça impressionante de um jovem artista promissor que demonstra uma habilidade notável em retratar {elemento_retratado}. É uma obra que certamente merece ser apreciada e analisada mais profundamente.
-"""
+        st.write(f'Cor {i+1} mais próxima no dicionário de cores dos arquétipos junguianos: {nearest_color_name} ({nearest_color_value})')

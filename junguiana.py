@@ -34,10 +34,9 @@ class Canvas:
         # Calculando a porcentagem de pixels em cada cluster
         self.counts = np.bincount(self.labels)
         self.percentages = self.counts / len(self.labels)
-
     def recreate_image(self):
         # Substituindo cada pixel pelo centro do cluster correspondente
-        self.quantified_image = self.kmeans.cluster_centers_[self.labels].astype(int)
+        self.quantified_image = self.kmeans.cluster_centers_[self.labels].astype('uint8')
 
         # Redimensionando a matriz de volta para o formato de imagem
         self.quantified_image = self.quantified_image.reshape(self.src.size[1], self.src.size[0], 3)

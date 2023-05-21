@@ -11,82 +11,32 @@ import io  # Essa é uma ferramenta que nos ajuda a lidar com arquivos e dados.
 import base64  # Essa é uma ferramenta que nos ajuda a converter dados.
 
 cores_junguianas = {
-    '1': {
+    '0, 0, 0': {
         'cor': 'Preto',
         'rgb': (0, 0, 0),
-        'anima_animus': 'A cor preta representa a sombra do inconsciente, simbolizando os aspectos desconhecidos e reprimidos de uma pessoa.',
-        'sombra': 'A cor preta é a própria sombra, representando os instintos primordiais e os aspectos ocultos da personalidade.',
-        'personalidade': 'A cor preta pode indicar uma personalidade enigmática, poderosa e misteriosa.',
-        'diagnostico': 'O uso excessivo da cor preta pode indicar uma tendência à negatividade, depressão ou repressão emocional.'
+        'anima_animus': 'A cor preta representa a sombra do indivíduo, seus aspectos desconhecidos e reprimidos que precisam ser integrados e reconhecidos para um desenvolvimento pleno.',
+        'sombra': 'O preto simboliza a sombra arquetípica, aquela parte da personalidade que foi rejeitada, escondida ou negada. Representa os desejos e impulsos mais sombrios que devem ser confrontados e integrados.',
+        'personalidade': 'Na pintura de tela, o preto pode ser interpretado como a expressão da personalidade introvertida e misteriosa, trazendo profundidade e mistério à obra. Também pode representar a busca pela verdade interior e autoconhecimento.',
+        'diagnostico_da_tela': 'A presença do preto na tela indica a necessidade de explorar as áreas sombrias da psique, confrontar os medos e reprimir a fim de alcançar um equilíbrio emocional e psicológico.'
     },
-    '2': {
-        'cor': 'Preto carvão',
+    '10, 10, 10': {
+        'cor': 'Preto Carvão',
         'rgb': (10, 10, 10),
-        'anima_animus': 'O preto carvão simboliza a sombra feminina do inconsciente, representando os aspectos desconhecidos e reprimidos da feminilidade.',
-        'sombra': 'O preto carvão é a própria sombra feminina, representando os instintos primordiais e os aspectos ocultos da feminilidade.',
-        'personalidade': 'A cor preto carvão pode indicar uma personalidade poderosa, misteriosa e enigmática com uma forte presença feminina.',
-        'diagnostico': 'O uso excessivo da cor preto carvão pode indicar uma tendência à negatividade, depressão ou repressão emocional na expressão feminina.'
+        'anima_animus': 'O preto carvão representa a energia primordial do arquétipo anima/animus, a fonte de criatividade e intuição que emerge do inconsciente coletivo.',
+        'sombra': 'O preto carvão simboliza a sombra profunda e ancestral, contendo os aspectos arquetípicos da anima (no inconsciente masculino) ou animus (no inconsciente feminino). Representa a força e paixão primordial que precisam ser reconhecidas e integradas.',
+        'personalidade': 'Na pintura de tela, o preto carvão pode representar a expressão intensa da personalidade, trazendo força e vitalidade à obra. Também pode simbolizar a conexão com as energias primordiais e a busca pela totalidade.',
+        'diagnostico_da_tela': 'A presença do preto carvão na tela indica uma profunda conexão com a energia arquetípica da anima/animus, sugerindo uma expressão artística intensa e um mergulho nas camadas mais profundas do inconsciente.'
     },
-    '3': {
-        'cor': 'Cinza escuro',
-        'rgb': (17, 17, 17),
-        'anima_animus': 'O cinza escuro representa a parte sombria e desconhecida do inconsciente, relacionada aos aspectos reprimidos e negligenciados da personalidade.',
-        'sombra': 'O cinza escuro simboliza a sombra interior, representando a reserva de energia não utilizada e os aspectos ocultos da personalidade.',
-        'personalidade': 'A cor cinza escuro pode indicar uma personalidade reservada, misteriosa e com profundidade interior.',
-        'diagnostico': 'O uso excessivo da cor cinza escuro pode indicar uma tendência a se esconder, reprimir emoções ou evitar o autoconhecimento.'
-    },
-    '4': {
-        'cor': 'Cinza ardósia',
-        'rgb': (47, 79, 79),
-        'anima_animus': 'O cinza ardósia representa a sombra feminina do inconsciente, relacionada aos aspectos reprimidos e negligenciados da feminilidade.',
-        'sombra': 'O cinza ardósia é a própria sombra feminina, representando a reserva de energia não utilizada e os aspectos ocultos da feminilidade.',
-        'personalidade': 'A cor cinza ardósia pode indicar uma personalidade reservada, misteriosa e com uma forte presença feminina.',
-        'diagnostico': 'O uso excessivo da cor cinza ardósia pode indicar uma tendência a se esconder, reprimir emoções ou evitar o autoconhecimento na expressão feminina.'
-    },
-    
-
-    '6': {
-        'cor': 'Cinza',
-        'rgb': (128, 128, 128),
-        'anima_animus': 'O cinza representa a energia neutra do animus, o arquétipo masculino no inconsciente feminino.',
-        'sombra': 'O cinza é a sombra do animus, simbolizando os aspectos masculinos reprimidos e desconhecidos de uma pessoa.',
-        'personalidade': 'A cor cinza pode indicar uma personalidade equilibrada, prática e racional, com uma abordagem neutra e imparcial.',
-        'diagnostico': 'O uso excessivo da cor cinza pode indicar uma tendência ao tédio, falta de paixão ou dificuldade em expressar emoções.'
-    },
-    '7': {
-        'cor': 'Cinza claro',
-        'rgb': (211, 211, 211),
-        'anima_animus': 'O cinza claro simboliza a energia neutra do animus, o arquétipo masculino no inconsciente feminino, em uma tonalidade mais suave.',
-        'sombra': 'O cinza claro representa a sombra do animus em uma tonalidade mais suave, revelando os aspectos masculinos reprimidos e desconhecidos de uma pessoa.',
-        'personalidade': 'A cor cinza claro pode indicar uma personalidade equilibrada, prática e racional, com uma abordagem neutra e imparcial, porém mais suave e delicada.',
-        'diagnostico': 'O uso excessivo da cor cinza claro pode indicar uma tendência ao conformismo, falta de confiança ou dificuldade em expressar emoções de forma assertiva.'
-    },
-    '8': {
-        'cor': 'Branco fumaça',
-        'rgb': (245, 245, 245),
-        'anima_animus': 'O branco fumaça representa a energia pura e transcendente do animus, o arquétipo masculino no inconsciente feminino, em sua forma mais suave.',
-        'sombra': 'O branco fumaça simboliza a sombra do animus em uma forma pura e transcendente, revelando os aspectos masculinos reprimidos e desconhecidos de uma pessoa de maneira sutil.',
-        'personalidade': 'A cor branco fumaça pode indicar uma personalidade calma, pacífica e harmoniosa, com uma conexão profunda com o arquétipo masculino interior.',
-        'diagnostico': 'O uso excessivo da cor branco fumaça pode indicar uma tendência à evasão da realidade, dificuldade em lidar com conflitos ou falta de assertividade.'
-    },
-    '9': {
+    '255, 255, 255': {
         'cor': 'Branco',
         'rgb': (255, 255, 255),
-        'anima_animus': 'O branco representa a energia pura e transcendente do animus, o arquétipo masculino no inconsciente feminino.',
-        'sombra': 'O branco é a sombra do animus em sua forma mais pura e transcendente, revelando os aspectos masculinos reprimidos e desconhecidos de uma pessoa.',
-        'personalidade': 'A cor branca pode indicar uma personalidade pura, inocente e equilibrada, com uma forte conexão com o arquétipo masculino interior.',
-        'diagnostico': 'O uso excessivo da cor branca pode indicar uma tendência à falta de individualidade, falta de autenticidade ou dificuldade em estabelecer limites pessoais.'
+        'anima_animus': 'A cor branca representa a totalidade e a transcendência dos arquétipos Anima/Animus. Simboliza a união dos opostos e a busca por equilíbrio e harmonia.',
+        'sombra': 'O branco representa a integração da sombra e a transformação dos aspectos negativos da personalidade. É o resultado do processo de individuação, onde os conflitos e contradições internas são reconciliados.',
+        'personalidade': 'Na pintura de tela, o branco pode ser interpretado como a expressão da personalidade aberta e iluminada, trazendo luminosidade e pureza à obra. Também pode representar a busca pela transcendência e realização espiritual.',
+        'diagnostico_da_tela': 'A presença do branco na tela indica um estado de integração e equilíbrio psicológico, sugerindo uma expressão artística luminosa e harmoniosa.'
     },
-    '10': {
-        'cor': 'Vermelho escuro',
-        'rgb': (139, 0, 0),
-        'anima_animus': 'O vermelho escuro representa a energia intensa e apaixonada do animus, o arquétipo masculino no inconsciente feminino.',
-        'sombra': 'O vermelho escuro é a sombra do animus, simbolizando os aspectos masculinos intensos, agressivos e reprimidos de uma pessoa.',
-        'personalidade': 'A cor vermelho escuro pode indicar uma personalidade poderosa, apaixonada e determinada, com uma forte conexão com o arquétipo masculino interior.',
-        'diagnostico': 'O uso excessivo da cor vermelho escuro pode indicar uma tendência à agressividade, raiva descontrolada ou dificuldade em encontrar equilíbrio emocional.'
-    },
-  
 }
+
 
 
 

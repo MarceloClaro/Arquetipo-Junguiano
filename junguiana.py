@@ -5,6 +5,8 @@ from PIL import Image
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
+from sklearn.cluster import KMeans
+
 
 
 # Dicionário com cores da psicologia das cores

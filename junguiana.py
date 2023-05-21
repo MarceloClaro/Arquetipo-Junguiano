@@ -69,12 +69,13 @@ def calculate_ml(c, m, y, k, total_ml):
 
 def buscar_cor_proxima(rgb, cores_junguianas):
     distancias = []
+    cores = list(cores_junguianas.keys())
     for cor_junguiana in cores_junguianas.values():
         cor_junguiana_rgb = cor_junguiana['rgb']
         distancia = np.sqrt(np.sum((np.array(rgb) - np.array(cor_junguiana_rgb)) ** 2))
         distancias.append(distancia)
     cor_proxima_index = np.argmin(distancias)
-    return list(cores_junguianas.values())[cor_proxima_index]
+    return cores_junguianas[cores[cor_proxima_index]]
 
 
 

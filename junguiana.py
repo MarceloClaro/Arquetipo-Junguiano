@@ -96,6 +96,8 @@ def main():
     if st.button('Gerar'):
         # Restante do código...
         
+        colors = None  # Definir a variável colors
+        
         for i, color in enumerate(colors):
             color_block = np.ones((50, 50, 3), np.uint8) * color[::-1]
             st.image(color_block, width=50)

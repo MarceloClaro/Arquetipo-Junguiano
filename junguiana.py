@@ -239,6 +239,10 @@ if uploaded_file is not None:
             Preto (K): {k_ml:.2f} ml
                    
             """)
+            st.write(f"Área da cor na imagem: {color_area} pixels")
+            st.write(f"Porcentagem da cor na imagem: {color_percentage:.2f} %")
+            st.write("\n")
+
             cor_proxima = buscar_cor_proxima(color, cores_junguianas)
             st.write(f"      Cor Junguiana Mais Próxima: {cor_proxima['cor']}")
             st.write(f"      Anima/Animus: {cor_proxima['anima_animus']}")

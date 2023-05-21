@@ -14,29 +14,19 @@ cores_junguianas = {
     '0, 0, 0': {
         'cor': 'Preto',
         'rgb': (0, 0, 0),
-        'anima_animus': 'A cor preta representa a sombra do indivíduo, seus aspectos desconhecidos e reprimidos que precisam ser integrados e reconhecidos para um desenvolvimento pleno.',
-        'sombra': 'O preto simboliza a sombra arquetípica, aquela parte da personalidade que foi rejeitada, escondida ou negada. Representa os desejos e impulsos mais sombrios que devem ser confrontados e integrados.',
-        'personalidade': 'Na pintura de tela, o preto pode ser interpretado como a expressão da personalidade introvertida e misteriosa, trazendo profundidade e mistério à obra. Também pode representar a busca pela verdade interior e autoconhecimento.',
-        'diagnostico_da_tela': 'A presença do preto na tela indica a necessidade de explorar as áreas sombrias da psique, confrontar os medos e reprimir a fim de alcançar um equilíbrio emocional e psicológico.'
+        ...
     },
     '10, 10, 10': {
         'cor': 'Preto Carvão',
         'rgb': (10, 10, 10),
-        'anima_animus': 'O preto carvão representa a energia primordial do arquétipo anima/animus, a fonte de criatividade e intuição que emerge do inconsciente coletivo.',
-        'sombra': 'O preto carvão simboliza a sombra profunda e ancestral, contendo os aspectos arquetípicos da anima (no inconsciente masculino) ou animus (no inconsciente feminino). Representa a força e paixão primordial que precisam ser reconhecidas e integradas.',
-        'personalidade': 'Na pintura de tela, o preto carvão pode representar a expressão intensa da personalidade, trazendo força e vitalidade à obra. Também pode simbolizar a conexão com as energias primordiais e a busca pela totalidade.',
-        'diagnostico_da_tela': 'A presença do preto carvão na tela indica uma profunda conexão com a energia arquetípica da anima/animus, sugerindo uma expressão artística intensa e um mergulho nas camadas mais profundas do inconsciente.'
+        ...
     },
     '255, 255, 255': {
         'cor': 'Branco',
         'rgb': (255, 255, 255),
-        'anima_animus': 'A cor branca representa a totalidade e a transcendência dos arquétipos Anima/Animus. Simboliza a união dos opostos e a busca por equilíbrio e harmonia.',
-        'sombra': 'O branco representa a integração da sombra e a transformação dos aspectos negativos da personalidade. É o resultado do processo de individuação, onde os conflitos e contradições internas são reconciliados.',
-        'personalidade': 'Na pintura de tela, o branco pode ser interpretado como a expressão da personalidade aberta e iluminada, trazendo luminosidade e pureza à obra. Também pode representar a busca pela transcendência e realização espiritual.',
-        'diagnostico_da_tela': 'A presença do branco na tela indica um estado de integração e equilíbrio psicológico, sugerindo uma expressão artística luminosa e harmoniosa.'
+        ...
     },
 }
-
 
 
 
@@ -69,15 +59,13 @@ def calculate_ml(c, m, y, k, total_ml):
 
 def buscar_cor_proxima(rgb, cores_junguianas):
     distancias = []
-    cores = list(cores_junguianas.values())
-    for cor_junguiana in cores:
+    for cor_junguiana in cores_junguianas.values():
         cor_junguiana_rgb = cor_junguiana['rgb']
         distancia = np.sqrt(np.sum((np.array(rgb) - np.array(cor_junguiana_rgb)) ** 2))
         distancias.append(distancia)
     cor_proxima_index = np.argmin(distancias)
-    return cores[cor_proxima_index]
-
-
+    cor_proxima_rgb = list(cores_junguianas.keys())[cor_proxima_index]
+    return cores_junguianas[cor_proxima_rgb]
 
 
 class Canvas():

@@ -73,7 +73,8 @@ def buscar_cor_proxima(rgb, cores_junguianas):
         distancia = np.sqrt(np.sum((np.array(rgb) - np.array(cor_junguiana_rgb)) ** 2))
         distancias.append(distancia)
     cor_proxima_index = np.argmin(distancias)
-    return cores_junguianas[str(cor_proxima_index + '0, 0, 0')]
+    return cores_junguianas[str(cor_proxima_index) + '0, 0, 0']
+
 
 class Canvas():
     def __init__(self, src, nb_color, pixel_size=4000):

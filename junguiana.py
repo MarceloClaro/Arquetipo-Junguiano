@@ -32,11 +32,38 @@ class Canvas:
         self.colors = []
         self.color_areas = []
 
-        # ...
-        # Implemente a lógica para gerar a imagem resultante, as cores e a imagem segmentada
-        # ...
+        # Converter a imagem para o formato RGB
+        image_rgb = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
+
+        # Converter a imagem para o formato LAB
+        image_lab = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2LAB)
+
+        # Aplicar segmentação de cor K-means
+        pixels = image_lab.reshape((-1, 3))
+        kmeans = KMeans(n_clusters=self.num_cores, random_state=0).fit(pixels)
+        segmented_labels = kmeans.predict(pixels)
+
+        # Obter as cores e áreas correspondentes
+        for i in range(self.num_cores):
+            color = kmeans.cluster_centers_[i].astype(int)
+            area = np.sum(segmented_labels == i)
+
+            self.colors.append(color)
+            self.color_areas.append(area)
+
+        # Pintar a imagem resultante com as cores correspondentes
+        for i in range(height):
+            for j in range(width):
+                pixel_lab = image_lab[i, j]
+                label = kmeans.predict([pixel_lab])[0]
+                self.result_image[i, j] = kmeans.cluster_centers_[label]
+
+        # Atualizar a imagem segmentada
+        self.segmented_image = segmented_labels.reshape((height, width))
 
         return self.result_image, self.segmented_image, self.colors, self.color_areas
+
+
 
 def convert_image(image):
     img_array = np.array(image)

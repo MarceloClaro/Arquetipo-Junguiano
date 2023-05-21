@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 from PIL import Image
 import matplotlib.pyplot as plt
+from io import BytesIO
 
 # Dicionário com cores da psicologia das cores
 cores_junguianas = {

@@ -1,6 +1,4 @@
-Aqui está o código revisado com as propostas de modificação nas funções:
 
-```python
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.utils import shuffle

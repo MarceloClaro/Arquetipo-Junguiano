@@ -183,6 +183,10 @@ def main():
             st.image(quantified_image, caption='Imagem segmentada', use_column_width=True)
 
             st.subheader('Cores da paleta gerada:')
+        for i, color in enumerate(colors):
+            color_block = np.ones((50, 50, 3), np.uint8) * color[::-1]  # Cores em formato BGR
+            st.image(color_block, caption=f'Cor {i+1}', width=50)
+            
             for i, color in enumerate(colors):
                 st.write(f"Cor {i+1}: RGB: {color}")
                 c_ml, m_ml, y_ml, k_ml = calculate_ml(*rgb_to_cmyk(*color), total_ml)

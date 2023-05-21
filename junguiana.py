@@ -73,7 +73,7 @@ def buscar_cor_proxima(rgb, cores_junguianas):
         distancia = np.sqrt(np.sum((np.array(rgb) - np.array(cor_junguiana_rgb)) ** 2))
         distancias.append(distancia)
     cor_proxima_index = np.argmin(distancias)
-    return cores_junguianas[str(cor_proxima_index + 1)]
+    return cores_junguianas[str(cor_proxima_index + '0, 0, 0')]
 
 class Canvas():
     def __init__(self, src, nb_color, pixel_size=4000):
@@ -233,7 +233,7 @@ if uploaded_file is not None:
                    
             """)
             st.write(f"Área da cor na imagem: {color_area} pixels")
-            st.write(f"Porcentagem da cor na imagem: {color_percentage:.2f} %")
+            st.write(f"Porcentagem da cor na imagem: {color_percentage} %")
             st.write("\n")
 
             cor_proxima = buscar_cor_proxima(color, cores_junguianas)

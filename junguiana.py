@@ -44,6 +44,48 @@ cores_junguianas = {
         'diagnostico': 'O uso excessivo da cor cinza ardósia pode indicar uma tendência a se esconder, reprimir emoções ou evitar o autoconhecimento na expressão feminina.'
     },
     
+
+    '6': {
+        'cor': 'Cinza',
+        'rgb': (128, 128, 128),
+        'anima_animus': 'O cinza representa a energia neutra do animus, o arquétipo masculino no inconsciente feminino.',
+        'sombra': 'O cinza é a sombra do animus, simbolizando os aspectos masculinos reprimidos e desconhecidos de uma pessoa.',
+        'personalidade': 'A cor cinza pode indicar uma personalidade equilibrada, prática e racional, com uma abordagem neutra e imparcial.',
+        'diagnostico': 'O uso excessivo da cor cinza pode indicar uma tendência ao tédio, falta de paixão ou dificuldade em expressar emoções.'
+    },
+    '7': {
+        'cor': 'Cinza claro',
+        'rgb': (211, 211, 211),
+        'anima_animus': 'O cinza claro simboliza a energia neutra do animus, o arquétipo masculino no inconsciente feminino, em uma tonalidade mais suave.',
+        'sombra': 'O cinza claro representa a sombra do animus em uma tonalidade mais suave, revelando os aspectos masculinos reprimidos e desconhecidos de uma pessoa.',
+        'personalidade': 'A cor cinza claro pode indicar uma personalidade equilibrada, prática e racional, com uma abordagem neutra e imparcial, porém mais suave e delicada.',
+        'diagnostico': 'O uso excessivo da cor cinza claro pode indicar uma tendência ao conformismo, falta de confiança ou dificuldade em expressar emoções de forma assertiva.'
+    },
+    '8': {
+        'cor': 'Branco fumaça',
+        'rgb': (245, 245, 245),
+        'anima_animus': 'O branco fumaça representa a energia pura e transcendente do animus, o arquétipo masculino no inconsciente feminino, em sua forma mais suave.',
+        'sombra': 'O branco fumaça simboliza a sombra do animus em uma forma pura e transcendente, revelando os aspectos masculinos reprimidos e desconhecidos de uma pessoa de maneira sutil.',
+        'personalidade': 'A cor branco fumaça pode indicar uma personalidade calma, pacífica e harmoniosa, com uma conexão profunda com o arquétipo masculino interior.',
+        'diagnostico': 'O uso excessivo da cor branco fumaça pode indicar uma tendência à evasão da realidade, dificuldade em lidar com conflitos ou falta de assertividade.'
+    },
+    '9': {
+        'cor': 'Branco',
+        'rgb': (255, 255, 255),
+        'anima_animus': 'O branco representa a energia pura e transcendente do animus, o arquétipo masculino no inconsciente feminino.',
+        'sombra': 'O branco é a sombra do animus em sua forma mais pura e transcendente, revelando os aspectos masculinos reprimidos e desconhecidos de uma pessoa.',
+        'personalidade': 'A cor branca pode indicar uma personalidade pura, inocente e equilibrada, com uma forte conexão com o arquétipo masculino interior.',
+        'diagnostico': 'O uso excessivo da cor branca pode indicar uma tendência à falta de individualidade, falta de autenticidade ou dificuldade em estabelecer limites pessoais.'
+    },
+    '10': {
+        'cor': 'Vermelho escuro',
+        'rgb': (139, 0, 0),
+        'anima_animus': 'O vermelho escuro representa a energia intensa e apaixonada do animus, o arquétipo masculino no inconsciente feminino.',
+        'sombra': 'O vermelho escuro é a sombra do animus, simbolizando os aspectos masculinos intensos, agressivos e reprimidos de uma pessoa.',
+        'personalidade': 'A cor vermelho escuro pode indicar uma personalidade poderosa, apaixonada e determinada, com uma forte conexão com o arquétipo masculino interior.',
+        'diagnostico': 'O uso excessivo da cor vermelho escuro pode indicar uma tendência à agressividade, raiva descontrolada ou dificuldade em encontrar equilíbrio emocional.'
+    },
+  
 }
 
 

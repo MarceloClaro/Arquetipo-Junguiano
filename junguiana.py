@@ -42,8 +42,9 @@ cores_junguianas = {
 
 # Aqui estamos criando uma nova ferramenta que chamamos de "Canvas".
 # Isso nos ajuda a lidar com imagens e cores.
-
 def rgb_to_cmyk(r, g, b):
+    r, g, b = np.clip([r, g, b], 0, 255)
+    
     if (r == 0) and (g == 0) and (b == 0):
         return 0, 0, 0, 1
     c = 1 - r / 255
@@ -73,7 +74,8 @@ def buscar_cor_proxima(rgb, cores_junguianas):
         distancia = np.sqrt(np.sum((np.array(rgb) - np.array(cor_junguiana_rgb)) ** 2))
         distancias.append(distancia)
     cor_proxima_index = np.argmin(distancias)
-    return cores_junguianas[str(cor_proxima_index) + '0, 0, 0']
+    return list(cores_junguianas.values())[cor_proxima_index]
+
 
 
 class Canvas():

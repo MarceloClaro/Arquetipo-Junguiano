@@ -4,6 +4,8 @@ import cv2
 from PIL import Image
 import matplotlib.pyplot as plt
 from io import BytesIO
+import base64
+
 
 # Dicionário com cores da psicologia das cores
 cores_junguianas = {

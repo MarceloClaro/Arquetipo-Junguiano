@@ -2,6 +2,7 @@ import streamlit as st
 from PIL import Image
 from sklearn.cluster import KMeans
 import numpy as np
+import matplotlib.pyplot as plt
 
 def process_image(image):
     # Converter a imagem para RGB
@@ -27,7 +28,7 @@ def clusterize_image(image_array, n_clusters):
     counts = np.bincount(labels)
     percentages = counts / len(labels)
     
-    return percentages
+    return percentages, kmeans.cluster_centers_
 
 st.title("Clusterização de Imagem RGB")
 
@@ -45,8 +46,14 @@ if uploaded_file is not None:
     n_clusters = st.slider("Número de clusters", min_value=2, max_value=10, value=5)
     
     # Clusterizar a imagem
-    percentages = clusterize_image(image_array, n_clusters)
+    percentages, cluster_centers = clusterize_image(image_array, n_clusters)
     
-    # Exibir as porcentagens
+    # Exibir as porcentagens e as cores
     for i in range(n_clusters):
-        st.write(f"Cluster {i+1}: {percentages[i]*100:.2f}%")
+        rgb = cluster_centers[i].astype(int)
+        st.write(f"Cluster {i+1}: {percentages[i]*100:.2f}%  RGB:{rgb}")
+        
+        fig, ax = plt.subplots(figsize=(2, 2))
+        ax.add_patch(plt.Rectangle((0, 0), 1, 1, color=rgb/255))
+        plt.axis('off')
+        st.pyplot(fig)

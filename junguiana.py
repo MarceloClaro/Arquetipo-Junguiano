@@ -183,11 +183,10 @@ def main():
             st.image(quantified_image, caption='Imagem segmentada', use_column_width=True)
 
             st.subheader('Cores da paleta gerada:')
-        for i, color in enumerate(colors):
-            color_block = np.ones((50, 50, 3), np.uint8) * color[::-1]  # Cores em formato BGR
-            st.image(color_block, caption=f'Cor {i+1}', width=50)
-            
             for i, color in enumerate(colors):
+                color_block = np.ones((50, 50, 3), np.uint8) * color[::-1]  # Cores em formato BGR
+                st.image(color_block, caption=f'Cor {i+1}', width=50)
+
                 st.write(f"Cor {i+1}: RGB: {color}")
                 c_ml, m_ml, y_ml, k_ml = calculate_ml(*rgb_to_cmyk(*color), total_ml)
                 st.write(f"      CMYK: {c_ml:.2f}, {m_ml:.2f}, {y_ml:.2f}, {k_ml:.2f}")
@@ -197,6 +196,7 @@ def main():
                 st.write(f"      Sombra: {cor_proxima['sombra']}")
                 st.write(f"      Personalidade: {cor_proxima['personalidade']}")
                 st.write(f"      Diagnóstico: {cor_proxima['diagnostico']}")
+
     else:
         st.write('Por favor, faça o upload de uma imagem')
 

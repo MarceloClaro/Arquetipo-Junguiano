@@ -1,61 +1,61 @@
 import numpy as np
-import streamlit as st
 from sklearn.cluster import KMeans
+from sklearn.utils import shuffle
 import cv2
+import streamlit as st
 from PIL import Image
 import io
 import base64
 
+# Supondo que a função rgb_to_cmyk, calculate_ml e a classe Canvas estão definidas.
 
-def get_image_download_link(img, filename, text):
-    buffered = io.BytesIO()
-    img.save(buffered, format="JPEG")
-    img_str = base64.b64encode(buffered.getvalue()).decode()
-    href = f'<a href="data:image/jpeg;base64,{img_str}" download="{filename}">{text}</a>'
-    return href
+st.image("clube.png")
+st.title('Gerador de Paleta de Cores para Pintura por Números')
+st.subheader("Sketching and concept development")
+st.subheader("""
+Autor: Marcelo Claro
 
+https://orcid.org/0000-0001-8996-2887
 
-def process_image(image, n_colors):
-    image = np.array(image)
-    image = image.reshape(-1, 3)
-    kmeans = KMeans(n_clusters=n_colors)
-    kmeans.fit(image)
+marceloclaro@geomaker.org
 
-    def recreate_image(codebook, labels, w, h):
-        d = codebook.shape[1]
-        image = np.zeros((w, h, d))
-        label_idx = 0
-        for i in range(w):
-            for j in range(h):
-                image[i][j] = codebook[labels[label_idx]]
-                label_idx += 1
-        return image
+Whatsapp:(88)98158-7145 (https://www.geomaker.org/)
+""")
 
-    labels = kmeans.predict(image)
-    w, h = image.shape[:2]
-    canvas = recreate_image(kmeans.cluster_centers_, labels, w, h)
-    return canvas
+uploaded_file = st.file_uploader("1. Carregue uma imagem", type=["jpg", "png"])
 
-
-st.title('Gerador de pintura por números')
-st.write('Por favor, carregue sua imagem abaixo:')
-
-uploaded_file = st.file_uploader("Escolha uma imagem", type=["jpg", "png"])
 if uploaded_file is not None:
-    image = Image.open(uploaded_file)
-    st.image(image, caption='Imagem carregada.', use_column_width=True)
+    file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
+    image = cv2.imdecode(file_bytes, 1)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    st.image(image, caption='Imagem Carregada', use_column_width=True)
 
-    n_colors = st.slider('Selecione o número de cores', 1, 20, 3)
+    nb_color = st.slider('2. Escolha o número de cores para pintar', min_value=1, max_value=80, value=2, step=1)
+    total_ml = st.slider('Escolha o total em ml da tinta de cada cor', min_value=1, max_value=1000, value=10, step=1)
+    pixel_size = st.slider('Escolha o tamanho do pixel da pintura', min_value=500, max_value=8000, value=4000, step=100)
 
-    if st.button('Gerar pintura por números'):
-        try:
-            canvas = process_image(image, n_colors)
-            st.image(canvas, caption='Sua pintura por números.', use_column_width=True)
+    if st.button('3. Gerar Tela'):
+        # Aqui incluiríamos o código para gerar a tela usando o KMeans e outras funcionalidades
 
-            result = Image.fromarray((canvas * 255).astype(np.uint8))
-            st.markdown(get_image_download_link(result, 'pintura_por_numeros.png', 'Clique aqui para baixar a imagem'), unsafe_allow_html=True)
-        except Exception as e:
-            st.error(f'Ocorreu um erro ao processar a imagem: {e}')
+        # Suponha que "result" é a imagem resultante e "segmented_image" é a imagem segmentada
+        st.image(result, caption='Imagem Resultante', use_column_width=True)
+        st.image(segmented_image, caption='Imagem Segmentada', use_column_width=True)
+
+        if st.button('4. Salvar contorno e paleta'):
+            # Fornecer botões para baixar a imagem resultante e a imagem segmentada
+            result_bytes = cv2.imencode('.jpg', result)[1].tobytes()
+            st.download_button(
+                label="Baixar imagem resultante",
+                data=result_bytes,
+                file_name='result.jpg',
+                mime='image/jpeg')
+
+            segmented_image_bytes = cv2.imencode('.jpg', segmented_image)[1].tobytes()
+            st.download_button(
+                label="Baixar imagem segmentada",
+                data=segmented_image_bytes,
+                file_name='segmented.jpg',
+                mime='image/jpeg')
+
 else:
-    st.error('Por favor, carregue uma imagem.')
-
+    st.error("Por favor, carregue uma imagem.")  # Mensagem de erro caso nenhuma imagem seja carregada

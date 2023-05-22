@@ -1,81 +1,61 @@
-import streamlit as st
-from PIL import Image
-from sklearn.cluster import KMeans
 import numpy as np
-import matplotlib.pyplot as plt
+import streamlit as st
+from sklearn.cluster import KMeans
+import cv2
+from PIL import Image
+import io
+import base64
 
-class Canvas:
-    def __init__(self, src, nb_color, pixel_size):
-        self.src = src.convert("RGB")
-        self.nb_color = nb_color
-        self.pixel_size = pixel_size
 
-    def resize(self):
-        width, height = self.src.size
-        new_height = self.pixel_size
-        new_width = int(new_height * width / height)
-        self.src = self.src.resize((new_width, new_height))
+def get_image_download_link(img, filename, text):
+    buffered = io.BytesIO()
+    img.save(buffered, format="JPEG")
+    img_str = base64.b64encode(buffered.getvalue()).decode()
+    href = f'<a href="data:image/jpeg;base64,{img_str}" download="{filename}">{text}</a>'
+    return href
 
-    def cleaning(self):
-        # Implementação da limpeza da imagem
-        pass
 
-    def quantification(self):
-        # Convertendo a imagem para um array NumPy
-        self.image_array = np.array(self.src)
+def process_image(image, n_colors):
+    image = np.array(image)
+    image = image.reshape(-1, 3)
+    kmeans = KMeans(n_clusters=n_colors)
+    kmeans.fit(image)
 
-        # Redimensionando a matriz para ter apenas duas dimensões
-        self.image_array = self.image_array.reshape((-1, 3))
+    def recreate_image(codebook, labels, w, h):
+        d = codebook.shape[1]
+        image = np.zeros((w, h, d))
+        label_idx = 0
+        for i in range(w):
+            for j in range(h):
+                image[i][j] = codebook[labels[label_idx]]
+                label_idx += 1
+        return image
 
-        # Clusterizando a imagem usando K-means
-        self.kmeans = KMeans(n_clusters=self.nb_color)
-        self.labels = self.kmeans.fit_predict(self.image_array)
+    labels = kmeans.predict(image)
+    w, h = image.shape[:2]
+    canvas = recreate_image(kmeans.cluster_centers_, labels, w, h)
+    return canvas
 
-        # Calculando a porcentagem de pixels em cada cluster
-        self.counts = np.bincount(self.labels)
-        self.percentages = self.counts / len(self.labels)
-    def recreate_image(self):
-        # Substituindo cada pixel pelo centro do cluster correspondente
-        self.quantified_image = self.kmeans.cluster_centers_[self.labels].astype('uint8')
 
-        # Redimensionando a matriz de volta para o formato de imagem
-        self.quantified_image = self.quantified_image.reshape(self.src.size[1], self.src.size[0], 3)
+st.title('Gerador de pintura por números')
+st.write('Por favor, carregue sua imagem abaixo:')
 
-        # Convertendo a matriz de volta para uma imagem
-        self.quantified_image = Image.fromarray(self.quantified_image)
+uploaded_file = st.file_uploader("Escolha uma imagem", type=["jpg", "png"])
+if uploaded_file is not None:
+    image = Image.open(uploaded_file)
+    st.image(image, caption='Imagem carregada.', use_column_width=True)
 
-    def generate(self):
-        self.resize()
-        self.cleaning()
-        self.quantification()
-        self.recreate_image()
+    n_colors = st.slider('Selecione o número de cores', 1, 20, 3)
 
-    def display(self):
-        st.image(self.quantified_image)
-        for i in range(self.nb_color):
-            rgb = self.kmeans.cluster_centers_[i].astype(int)
-            st.write(f"Cluster {i+1}: {self.percentages[i]*100:.2f}%  RGB:{rgb}")
-            
-            fig, ax = plt.subplots(figsize=(2, 2))
-            ax.add_patch(plt.Rectangle((0, 0), 1, 1, color=rgb/255))
-            plt.axis('off')
-            st.pyplot(fig)
+    if st.button('Gerar pintura por números'):
+        try:
+            canvas = process_image(image, n_colors)
+            st.image(canvas, caption='Sua pintura por números.', use_column_width=True)
 
-def main():
-    st.title("Análise de Cores de Imagem")
+            result = Image.fromarray((canvas * 255).astype(np.uint8))
+            st.markdown(get_image_download_link(result, 'pintura_por_numeros.png', 'Clique aqui para baixar a imagem'), unsafe_allow_html=True)
+        except Exception as e:
+            st.error(f'Ocorreu um erro ao processar a imagem: {e}')
+else:
+    st.error('Por favor, carregue uma imagem.')
 
-    uploaded_file = st.file_uploader("Carregue uma imagem", type=['jpg', 'jpeg', 'png'])
-    if uploaded_file is not None:
-        image = Image.open(uploaded_file)
-        st.image(image, caption='Imagem Original.', use_column_width=True)
-
-        n_clusters = st.slider("Número de clusters", min_value=2, max_value=10, value=5)
-        pixel_size = st.slider("Tamanho do Pixel", min_value=10, max_value=300, value=100)
-
-        if st.button('Processar Imagem'):
-            canvas = Canvas(image, n_clusters, pixel_size)
-            canvas.generate()
-            canvas.display()
-
-if __name__ == '__main__':
-    main()

@@ -7,7 +7,6 @@ from PIL import Image
 import io
 import base64
 
-
 def rgb_to_cmyk(r, g, b):
     if (r == 0) and (g == 0) and (b == 0):
         return 0, 0, 0, 1
@@ -23,7 +22,6 @@ def rgb_to_cmyk(r, g, b):
 
     return c, m, y, k
 
-
 def calculate_ml(c, m, y, k, total_ml):
     total_ink = c + m + y + k
     c_ml = (c / total_ink) * total_ml
@@ -32,8 +30,7 @@ def calculate_ml(c, m, y, k, total_ml):
     k_ml = (k / total_ink) * total_ml
     return c_ml, m_ml, y_ml, k_ml
 
-
-class Canvas():
+class Canvas:
     def __init__(self, src, nb_color, pixel_size=4000):
         self.src = cv2.cvtColor(src, cv2.COLOR_BGR2RGB)
         self.nb_color = nb_color
@@ -93,7 +90,6 @@ class Canvas():
         out = vfunc(np.arange(width * height))
         return np.resize(out, (width, height, codebook.shape[1]))
 
-
 st.image("clube.png")
 st.title('Gerador de Paleta de Cores para Pintura por Números')
 st.subheader("Sketching and concept development")
@@ -108,8 +104,9 @@ Whatsapp:(88)98158-7145 (https://www.geomaker.org/)
 """)
 
 uploaded_file = st.file_uploader("Escolha uma imagem", type=["jpg", "png"])
-st.write("Apresento a vocês um aplicativo chamado 'Gerador de Paleta de Cores para Pintura por Números'.")
-
+st.write("""
+Apresento a vocês um aplicativo chamado "Gerador de Paleta de Cores para Pintura por Números".
+""")
 if uploaded_file is not None:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     image = cv2.imdecode(file_bytes, 1)
@@ -117,16 +114,15 @@ if uploaded_file is not None:
     st.image(image, caption='Imagem Carregada', use_column_width=True)
 
     nb_color = st.slider('Escolha o número de cores para pintar', min_value=1, max_value=80, value=2, step=1)
-
     total_ml = st.slider('Escolha o total em ml da tinta de cada cor', min_value=1, max_value=1000, value=10, step=1)
-
     pixel_size = st.slider('Escolha o tamanho do pixel da pintura', min_value=500, max_value=8000, value=4000, step=100)
 
-    if st.button('Gerar Tela'):
+    if st.button('Gerar'):
         pil_image = Image.open(io.BytesIO(file_bytes))
         if 'dpi' in pil_image.info:
             dpi = pil_image.info['dpi']
             st.write(f'Resolução da imagem: {dpi} DPI')
+
             cm_per_inch = pixel_size
             cm_per_pixel = cm_per_inch / dpi[0]
             st.write(f'Tamanho de cada pixel: {cm_per_pixel:.4f} centímetros')
@@ -152,10 +148,30 @@ if uploaded_file is not None:
             color_area = np.count_nonzero(np.all(segmented_image == color, axis=-1))
             total_area = segmented_image.shape[0] * segmented_image.shape[1]
             color_percentage = (color_area / total_area) * 100
-
+            
             st.subheader("Sketching and concept development da paleta de cor")
-            st.write(f"PALETAS DE COR PARA: {total_ml:.2f} ml.")
-            st.write(f"Ciano (Azul) (C): {c_ml:.2f} ml")
-            st.write(f"Magenta (Vermelho) (M): {m_ml:.2f} ml")
-            st.write(f"Amarelo (Y): {y_ml:.2f} ml")
-            st.write(f"Preto (K): {k_ml:.2f} ml")
+            st.write(f"""
+            PALETAS DE COR PARA: {total_ml:.2f} ml.
+            
+            A cor pode ser alcançada pela combinação das cores primárias do modelo CMYK, utilizando a seguinte dosagem:
+
+            Ciano (Azul) (C): {c_ml:.2f} ml
+            Magenta (Vermelho) (M): {m_ml:.2f} ml
+            Amarelo (Y): {y_ml:.2f} ml
+            Preto (K): {k_ml:.2f} ml
+                    
+            """)
+
+        result_bytes = cv2.imencode('.jpg', result)[1].tobytes()
+        st.download_button(
+            label="Baixar imagem resultante",
+            data=result_bytes,
+            file_name='result.jpg',
+            mime='image/jpeg')
+
+        segmented_image_bytes = cv2.imencode('.jpg', segmented_image)[1].tobytes()
+        st.download_button(
+            label="Baixar imagem segmentada",
+            data=segmented_image_bytes,
+            file_name='segmented.jpg',
+            mime='image/jpeg')

@@ -142,6 +142,7 @@ if uploaded_file is not None:
 
 
 
+
         result_bytes = cv2.imencode('.jpg', result)[1].tobytes()
         st.download_button(
             label="Baixar Contorno",

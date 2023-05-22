@@ -7,6 +7,7 @@ from PIL import Image
 import io
 import base64
 
+
 def rgb_to_cmyk(r, g, b):
     if (r == 0) and (g == 0) and (b == 0):
         return 0, 0, 0, 1
@@ -22,6 +23,7 @@ def rgb_to_cmyk(r, g, b):
 
     return c, m, y, k
 
+
 def calculate_ml(c, m, y, k, total_ml):
     total_ink = c + m + y + k
     c_ml = (c / total_ink) * total_ml
@@ -30,7 +32,8 @@ def calculate_ml(c, m, y, k, total_ml):
     k_ml = (k / total_ink) * total_ml
     return c_ml, m_ml, y_ml, k_ml
 
-class Canvas():
+
+class Canvas:
     def __init__(self, src, nb_color, pixel_size=4000):
         self.src = cv2.cvtColor(src, cv2.COLOR_BGR2RGB)
         self.nb_color = nb_color
@@ -90,23 +93,16 @@ class Canvas():
         out = vfunc(np.arange(width * height))
         return np.resize(out, (width, height, codebook.shape[1]))
 
+
 st.image("clube.png")
 st.title('Gerador de Paleta de Cores para Pintura por Números')
 st.subheader("Sketching and concept development")
-st.subheader("""
-Autor: Marcelo Claro
-
-https://orcid.org/0000-0001-8996-2887
-
-marceloclaro@geomaker.org
-
-Whatsapp:(88)98158-7145 (https://www.geomaker.org/)
-""")
+st.subheader("Autor: Marcelo Claro")
+st.subheader("marceloclaro@geomaker.org")
+st.subheader("Whatsapp:(88)98158-7145")
 
 uploaded_file = st.file_uploader("Escolha uma imagem", type=["jpg", "png"])
-st.write("""
-Apresento a vocês um aplicativo chamado "Gerador de Paleta de Cores para Pintura por Números".
-""")
+st.write("Apresento a vocês um aplicativo chamado 'Gerador de Paleta de Cores para Pintura por Números'.")
 
 if uploaded_file is not None:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
@@ -115,44 +111,41 @@ if uploaded_file is not None:
     st.image(image, caption='Imagem Carregada', use_column_width=True)
 
     nb_color = st.slider('Escolha o número de cores para pintar', min_value=1, max_value=80, value=2, step=1)
+
     total_ml = st.slider('Escolha o total em ml da tinta de cada cor', min_value=1, max_value=1000, value=10, step=1)
+
     pixel_size = st.slider('Escolha o tamanho do pixel da pintura', min_value=500, max_value=8000, value=4000, step=100)
 
     if st.button('Gerar Tela'):
         canvas = Canvas(image, nb_color, pixel_size)
         result, colors, segmented_image = canvas.generate()
 
-        for i, color in enumerate(colors):
-            c, m, y, k = rgb_to_cmyk(*color)
-            c_ml, m_ml, y_ml, k_ml = calculate_ml(c, m, y, k, total_ml)
-
-            st.subheader(f"Cluster {i+1}:")
-            st.write(f"RGB: {color}")
-            st.write(f"CMYK: C={c_ml:.2f}mL, M={m_ml:.2f}mL, Y={y_ml:.2f}mL, K={k_ml:.2f}mL")
-            st.write("")
-
         st.image(result, caption='Imagem Resultante', use_column_width=True)
         st.image(segmented_image, caption='Imagem Segmentada', use_column_width=True)
+
         for i, color in enumerate(colors):
-            color_block_rgb = np.ones((50, 50, 3), np.uint8) * color[::-1]  # Cores no formato RGB
+            color_block_bgr = np.ones((50, 50, 3), np.uint8) * color[::-1]  # Cores no formato BGR
+            color_block_rgb = cv2.cvtColor(color_block_bgr, cv2.COLOR_BGR2RGB)  # Converter de BGR para RGB
             st.image(color_block_rgb, caption=f'Cor {i+1}', width=50)
 
+            r, g, b = color
+            c, m, y, k = rgb_to_cmyk(r, g, b)
+            c_ml, m_ml, y_ml, k_ml = calculate_ml(c, m, y, k, total_ml)
 
-
-
-
+            st.subheader(f"Cor {i+1}")
+            st.write(f"RGB: [{r:.4f}, {g:.4f}, {b:.4f}]")
+            st.write(f"CMYK: C={c_ml:.2f}mL, M={m_ml:.2f}mL, Y={y_ml:.2f}mL, K={k_ml:.2f}mL")
 
         result_bytes = cv2.imencode('.jpg', result)[1].tobytes()
         st.download_button(
-            label="Baixar Contorno",
+            label="Baixar Imagem Resultante",
             data=result_bytes,
-            file_name='contorno.jpg',
+            file_name='result.jpg',
             mime='image/jpeg')
 
-        palette_data = np.array(colors, dtype=np.uint8).reshape((1, len(colors), 3))
-        palette_bytes = cv2.imencode('.jpg', palette_data)[1].tobytes()
+        segmented_image_bytes = cv2.imencode('.jpg', segmented_image)[1].tobytes()
         st.download_button(
-            label="Baixar Paleta de Cores",
-            data=palette_bytes,
-            file_name='paleta.jpg',
+            label="Baixar Imagem Segmentada",
+            data=segmented_image_bytes,
+            file_name='segmented.jpg',
             mime='image/jpeg')

@@ -125,10 +125,7 @@ if uploaded_file is not None:
         for i, color in enumerate(colors):
             c, m, y, k = rgb_to_cmyk(*color)
             c_ml, m_ml, y_ml, k_ml = calculate_ml(c, m, y, k, total_ml)
-        for i, color in enumerate(colors):
-            color_block_bgr = np.ones((50, 50, 3), np.uint8) * color[::-1]  # Cores em formato BGR
-            color_block_rgb = cv2.cvtColor(color_block_bgr, cv2.COLOR_BGR2RGB)  # Converter de BGR para RGB
-            st.image(color_block_rgb, caption=f'Cor {i+1}', width=50)
+
             st.subheader(f"Cluster {i+1}:")
             st.write(f"RGB: {color}")
             st.write(f"CMYK: C={c_ml:.2f}mL, M={m_ml:.2f}mL, Y={y_ml:.2f}mL, K={k_ml:.2f}mL")
@@ -137,7 +134,10 @@ if uploaded_file is not None:
         st.image(result, caption='Imagem Resultante', use_column_width=True)
         st.image(segmented_image, caption='Imagem Segmentada', use_column_width=True)
         
-
+        for i, color in enumerate(colors):
+            color_block_bgr = np.ones((50, 50, 3), np.uint8) * color[::-1]  # Cores em formato BGR
+            color_block_rgb = cv2.cvtColor(color_block_bgr, cv2.COLOR_BGR2RGB)  # Converter de BGR para RGB
+            st.image(color_block_rgb, caption=f'Cor {i+1}', width=50)
 
 
         result_bytes = cv2.imencode('.jpg', result)[1].tobytes()

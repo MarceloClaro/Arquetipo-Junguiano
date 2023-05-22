@@ -14,6 +14,9 @@ import base64
 # As funções e a classe Canvas vão aqui
 #...
 
+class Canvas():
+    # Implemente as funções da classe Canvas aqui
+
 st.image("clube.png")  # Adiciona a imagem no topo do app
 st.title('Gerador de Paleta de Cores para Pintura por Números ')
 st.subheader("""

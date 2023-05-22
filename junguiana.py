@@ -133,11 +133,10 @@ if uploaded_file is not None:
 
         st.image(result, caption='Imagem Resultante', use_column_width=True)
         st.image(segmented_image, caption='Imagem Segmentada', use_column_width=True)
-        
         for i, color in enumerate(colors):
-            color_block_bgr = np.ones((50, 50, 3), np.uint8) * color[::-1]  # Cores no formato BGR
-            color_block_rgb = cv2.cvtColor(color_block_bgr, cv2.COLOR_BGR2RGB)  # Converter de BGR para RGB
+            color_block_rgb = np.ones((50, 50, 3), np.uint8) * color[::-1]  # Cores no formato RGB
             st.image(color_block_rgb, caption=f'Cor {i+1}', width=50)
+
 
 
 

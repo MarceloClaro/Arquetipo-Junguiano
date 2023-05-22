@@ -62,4 +62,9 @@ if uploaded_file is not None:
             file_name='result.jpg',
             mime='image/jpeg')
 
-        segmented_image_bytes = cv2.imencode('.jpg', segmented_image
+        segmented_image_bytes = cv2.imencode('.jpg', segmented_image)[1].tobytes()
+        st.download_button(
+            label="Salve a imagem segmentada",
+            data=segmented_image_bytes,
+            file_name='segmented.jpg',
+            mime='image/jpeg')

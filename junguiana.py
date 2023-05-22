@@ -134,8 +134,10 @@ if uploaded_file is not None:
             st.write(f"CMYK: C={c:.2f}, M={m:.2f}, Y={y:.2f}, K={k:.2f}")
             st.write(f"Quantidade de Tinta (ml): C={c_ml:.2f}, M={m_ml:.2f}, Y={y_ml:.2f}, K={k_ml:.2f}")
 
-    # Salvar contorno e paleta
-    if st.button('Salvar Contorno e Paleta'):
+# Salvar contorno e paleta
+if st.button('Salvar Contorno e Paleta'):
+    # Verificar se o contorno foi gerado
+    if 'result' in locals():
         # Salvar contorno
         result_bytes = cv2.imencode('.jpg', result)[1].tobytes()
         st.download_button(
@@ -143,14 +145,6 @@ if uploaded_file is not None:
             data=result_bytes,
             file_name='contorno.jpg',
             mime='image/jpeg')
+    else:
+        st.warning("Por favor, clique em 'Gerar Tela' antes de salvar o contorno.")
 
-        # Salvar paleta
-        palette = np.ones((100, 100 * len(colors), 3), np.uint8)
-        for i, color in enumerate(colors):
-            palette[:, i * 100 : (i + 1) * 100] = color[::-1]
-        palette_bytes = cv2.imencode('.jpg', palette)[1].tobytes()
-        st.download_button(
-            label="Baixar Paleta",
-            data=palette_bytes,
-            file_name='paleta.jpg',
-            mime='image/jpeg')

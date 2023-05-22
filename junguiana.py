@@ -137,29 +137,29 @@ if uploaded_file is not None:
         st.image(segmented_image, caption='Imagem Segmentada', use_column_width=True)
 
         for i, color in enumerate(colors):
-            color_block_bgr = np.ones((50, 50, 3), np.uint8) * color[::-1]
-            color_block_rgb = cv2.cvtColor(color_block_bgr, cv2.COLOR_BGR2RGB)
+            color_block_bgr = np.ones((50, 50, 3), np.uint8) * color[::-1]  # Cores no formato BGR
+            color_block_bgr = color_block_bgr.astype(np.float32) / 255.0  # Normalizar para valores entre 0 e 1
+            color_block_rgb = cv2.cvtColor(color_block_bgr, cv2.COLOR_BGR2RGB)  # Converter de BGR para RGB
             st.image(color_block_rgb, caption=f'Cor {i+1}', width=50)
 
-            r, g, b = color
+            r, g, b = color * 255.0  # Converter de volta para o intervalo entre 0 e 255
             c, m, y, k = rgb_to_cmyk(r, g, b)
             c_ml, m_ml, y_ml, k_ml = calculate_ml(c, m, y, k, total_ml)
 
             color_area = np.count_nonzero(np.all(segmented_image == color, axis=-1))
             total_area = segmented_image.shape[0] * segmented_image.shape[1]
             color_percentage = (color_area / total_area) * 100
-            
+
             st.subheader("Sketching and concept development da paleta de cor")
             st.write(f"""
             PALETAS DE COR PARA: {total_ml:.2f} ml.
-            
+
             A cor pode ser alcançada pela combinação das cores primárias do modelo CMYK, utilizando a seguinte dosagem:
 
             Ciano (Azul) (C): {c_ml:.2f} ml
             Magenta (Vermelho) (M): {m_ml:.2f} ml
             Amarelo (Y): {y_ml:.2f} ml
-            Preto (K): {k_ml:.2f} ml
-                    
+            Preto (K): {k_ml:.2f} ml                
             """)
 
         result_bytes = cv2.imencode('.jpg', result)[1].tobytes()
@@ -175,3 +175,4 @@ if uploaded_file is not None:
             data=segmented_image_bytes,
             file_name='segmented.jpg',
             mime='image/jpeg')
+

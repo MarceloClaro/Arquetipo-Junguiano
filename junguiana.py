@@ -33,7 +33,7 @@ def calculate_ml(c, m, y, k, total_ml):
     return c_ml, m_ml, y_ml, k_ml
 
 
-class Canvas:
+class Canvas():
     def __init__(self, src, nb_color, pixel_size=4000):
         self.src = cv2.cvtColor(src, cv2.COLOR_BGR2RGB)
         self.nb_color = nb_color
@@ -97,9 +97,15 @@ class Canvas:
 st.image("clube.png")
 st.title('Gerador de Paleta de Cores para Pintura por Números')
 st.subheader("Sketching and concept development")
-st.subheader("Autor: Marcelo Claro")
-st.subheader("marceloclaro@geomaker.org")
-st.subheader("Whatsapp:(88)98158-7145")
+st.subheader("""
+Autor: Marcelo Claro
+
+https://orcid.org/0000-0001-8996-2887
+
+marceloclaro@geomaker.org
+
+Whatsapp:(88)98158-7145 (https://www.geomaker.org/)
+""")
 
 uploaded_file = st.file_uploader("Escolha uma imagem", type=["jpg", "png"])
 st.write("Apresento a vocês um aplicativo chamado 'Gerador de Paleta de Cores para Pintura por Números'.")
@@ -117,35 +123,39 @@ if uploaded_file is not None:
     pixel_size = st.slider('Escolha o tamanho do pixel da pintura', min_value=500, max_value=8000, value=4000, step=100)
 
     if st.button('Gerar Tela'):
+        pil_image = Image.open(io.BytesIO(file_bytes))
+        if 'dpi' in pil_image.info:
+            dpi = pil_image.info['dpi']
+            st.write(f'Resolução da imagem: {dpi} DPI')
+            cm_per_inch = pixel_size
+            cm_per_pixel = cm_per_inch / dpi[0]
+            st.write(f'Tamanho de cada pixel: {cm_per_pixel:.4f} centímetros')
+
         canvas = Canvas(image, nb_color, pixel_size)
         result, colors, segmented_image = canvas.generate()
+
+        segmented_image = (segmented_image * 255).astype(np.uint8)
+        segmented_image = cv2.cvtColor(segmented_image, cv2.COLOR_BGR2RGB)
 
         st.image(result, caption='Imagem Resultante', use_column_width=True)
         st.image(segmented_image, caption='Imagem Segmentada', use_column_width=True)
 
         for i, color in enumerate(colors):
-            color_block_bgr = np.ones((50, 50, 3), np.uint8) * color[::-1]  # Cores no formato BGR
-            color_block_rgb = cv2.cvtColor(color_block_bgr, cv2.COLOR_BGR2RGB)  # Converter de BGR para RGB
+            color_block_bgr = np.ones((50, 50, 3), np.uint8) * color[::-1]
+            color_block_rgb = cv2.cvtColor(color_block_bgr, cv2.COLOR_BGR2RGB)
             st.image(color_block_rgb, caption=f'Cor {i+1}', width=50)
 
             r, g, b = color
             c, m, y, k = rgb_to_cmyk(r, g, b)
             c_ml, m_ml, y_ml, k_ml = calculate_ml(c, m, y, k, total_ml)
 
-            st.subheader(f"Cor {i+1}")
-            st.write(f"RGB: [{r:.4f}, {g:.4f}, {b:.4f}]")
-            st.write(f"CMYK: C={c_ml:.2f}mL, M={m_ml:.2f}mL, Y={y_ml:.2f}mL, K={k_ml:.2f}mL")
+            color_area = np.count_nonzero(np.all(segmented_image == color, axis=-1))
+            total_area = segmented_image.shape[0] * segmented_image.shape[1]
+            color_percentage = (color_area / total_area) * 100
 
-        result_bytes = cv2.imencode('.jpg', result)[1].tobytes()
-        st.download_button(
-            label="Baixar Imagem Resultante",
-            data=result_bytes,
-            file_name='result.jpg',
-            mime='image/jpeg')
-
-        segmented_image_bytes = cv2.imencode('.jpg', segmented_image)[1].tobytes()
-        st.download_button(
-            label="Baixar Imagem Segmentada",
-            data=segmented_image_bytes,
-            file_name='segmented.jpg',
-            mime='image/jpeg')
+            st.subheader("Sketching and concept development da paleta de cor")
+            st.write(f"PALETAS DE COR PARA: {total_ml:.2f} ml.")
+            st.write(f"Ciano (Azul) (C): {c_ml:.2f} ml")
+            st.write(f"Magenta (Vermelho) (M): {m_ml:.2f} ml")
+            st.write(f"Amarelo (Y): {y_ml:.2f} ml")
+            st.write(f"Preto (K): {k_ml:.2f} ml")

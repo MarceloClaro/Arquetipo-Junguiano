@@ -1,4 +1,3 @@
-# Importando todas as bibliotecas necessárias
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.utils import shuffle
@@ -7,8 +6,6 @@ import streamlit as st
 from PIL import Image
 import io
 import base64
-
-# Definindo as funções auxiliares
 
 def rgb_to_cmyk(r, g, b):
     if (r == 0) and (g == 0) and (b == 0):
@@ -93,12 +90,23 @@ class Canvas():
         out = vfunc(np.arange(width * height))
         return np.resize(out, (width, height, codebook.shape[1]))
 
-# Aqui é onde começamos a construir a interface do nosso programa
 st.image("clube.png")
 st.title('Gerador de Paleta de Cores para Pintura por Números')
+st.subheader("Sketching and concept development")
+st.subheader("""
+Autor: Marcelo Claro
 
-# Carregar imagem
+https://orcid.org/0000-0001-8996-2887
+
+marceloclaro@geomaker.org
+
+Whatsapp:(88)98158-7145 (https://www.geomaker.org/)
+""")
+
 uploaded_file = st.file_uploader("Escolha uma imagem", type=["jpg", "png"])
+st.write("""
+Apresento a vocês um aplicativo chamado "Gerador de Paleta de Cores para Pintura por Números".
+""")
 
 if uploaded_file is not None:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
@@ -106,45 +114,37 @@ if uploaded_file is not None:
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     st.image(image, caption='Imagem Carregada', use_column_width=True)
 
-    # Definir número de clusters
     nb_color = st.slider('Escolha o número de cores para pintar', min_value=1, max_value=80, value=2, step=1)
-
-    # Definir quantidade de tinta
     total_ml = st.slider('Escolha o total em ml da tinta de cada cor', min_value=1, max_value=1000, value=10, step=1)
-    
-    # Definir tamanho do pixel
     pixel_size = st.slider('Escolha o tamanho do pixel da pintura', min_value=500, max_value=8000, value=4000, step=100)
 
     if st.button('Gerar Tela'):
         canvas = Canvas(image, nb_color, pixel_size)
-        result, colors, quantified_image = canvas.generate()
-
-        st.image(result, caption='Imagem Resultante', use_column_width=True)
+        result, colors, segmented_image = canvas.generate()
 
         for i, color in enumerate(colors):
-            color_block = np.ones((50, 50, 3), np.uint8) * color[::-1]
-            st.image(color_block, caption=f'Cor {i+1}', width=50)
-
-            r, g, b = color
-            c, m, y, k = rgb_to_cmyk(r, g, b)
+            c, m, y, k = rgb_to_cmyk(*color)
             c_ml, m_ml, y_ml, k_ml = calculate_ml(c, m, y, k, total_ml)
 
             st.subheader(f"Cluster {i+1}:")
             st.write(f"RGB: {color}")
-            st.write(f"CMYK: C={c:.2f}, M={m:.2f}, Y={y:.2f}, K={k:.2f}")
-            st.write(f"Quantidade de Tinta (ml): C={c_ml:.2f}, M={m_ml:.2f}, Y={y_ml:.2f}, K={k_ml:.2f}")
+            st.write(f"CMYK: C={c_ml:.2f}mL, M={m_ml:.2f}mL, Y={y_ml:.2f}mL, K={k_ml:.2f}mL")
+            st.write("")
 
-# Salvar contorno e paleta
-if st.button('Salvar Contorno e Paleta'):
-    # Verificar se o contorno foi gerado
-    if 'result' in locals():
-        # Salvar contorno
+        st.image(result, caption='Imagem Resultante', use_column_width=True)
+        st.image(segmented_image, caption='Imagem Segmentada', use_column_width=True)
+
         result_bytes = cv2.imencode('.jpg', result)[1].tobytes()
         st.download_button(
             label="Baixar Contorno",
             data=result_bytes,
             file_name='contorno.jpg',
             mime='image/jpeg')
-    else:
-        st.warning("Por favor, clique em 'Gerar Tela' antes de salvar o contorno.")
 
+        palette_data = np.array(colors, dtype=np.uint8).reshape((1, len(colors), 3))
+        palette_bytes = cv2.imencode('.jpg', palette_data)[1].tobytes()
+        st.download_button(
+            label="Baixar Paleta de Cores",
+            data=palette_bytes,
+            file_name='paleta.jpg',
+            mime='image/jpeg')

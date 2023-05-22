@@ -1,4 +1,3 @@
-# Importando todas as coisas necessárias para o nosso programa funcionar.
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.utils import shuffle
@@ -8,7 +7,6 @@ from PIL import Image
 import io
 import base64
 
-# Funções auxiliares para conversão de cores
 def rgb_to_cmyk(r, g, b):
     if (r == 0) and (g == 0) and (b == 0):
         return 0, 0, 0, 1
@@ -32,7 +30,6 @@ def calculate_ml(c, m, y, k, total_ml):
     k_ml = (k / total_ink) * total_ml
     return c_ml, m_ml, y_ml, k_ml
 
-# Classe Canvas para processar a imagem e realizar as operações
 class Canvas():
     def __init__(self, src, nb_color, pixel_size=4000):
         self.src = cv2.cvtColor(src, cv2.COLOR_BGR2RGB)
@@ -61,6 +58,20 @@ class Canvas():
                     txt_x, txt_y = contour[0][0]
                     cv2.putText(canvas, '{:d}'.format(ind + 1), (txt_x, txt_y + 15),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
+
+        # Calcular a área de cada cluster
+        cluster_areas = []
+        for contour in cnts:
+            area = cv2.contourArea(contour)
+            cluster_areas.append(area)
+
+        # Calcular a porcentagem de cada cluster
+        total_area = sum(cluster_areas)
+        cluster_percentages = [area / total_area * 100 for area in cluster_areas]
+
+        # Exibir as porcentagens na interface do usuário
+        for ind, percentage in enumerate(cluster_percentages):
+            st.write(f"Cluster {ind+1}: {percentage:.2f}%")
 
         return canvas, colors, quantified_image
 
@@ -93,48 +104,42 @@ class Canvas():
         out = vfunc(np.arange(width * height))
         return np.resize(out, (width, height, codebook.shape[1]))
 
-# Configuração inicial do app
 st.image("clube.png")
-st.title('Gerador de Pintura por Números')
+st.title('Gerador de Paleta de Cores para Pintura por Números')
 st.subheader("Sketching and concept development")
 
-# Carregar imagem
-uploaded_file = st.file_uploader("Carregue uma imagem", type=["jpg", "png"])
-st.write("Bem-vindo ao Gerador de Pintura por Números!")
+uploaded_file = st.file_uploader("Escolha uma imagem", type=["jpg", "png"])
+st.write("""
+Apresento a vocês um aplicativo chamado "Gerador de Paleta de Cores para Pintura por Números".
+""")
+
 if uploaded_file is not None:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     image = cv2.imdecode(file_bytes, 1)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     st.image(image, caption='Imagem Carregada', use_column_width=True)
 
-    # Escolher o número de clusters
-    nb_color = st.slider('Escolha o número de clusters', min_value=2, max_value=20, value=4, step=1)
+    nb_color = st.slider('Escolha o número de cores para pintar', min_value=1, max_value=80, value=2, step=1)
+    pixel_size = st.slider('Escolha o tamanho do pixel da pintura', min_value=500, max_value=8000, value=4000, step=100)
 
     if st.button('Gerar Tela'):
-        canvas = Canvas(image, nb_color)
-        result, colors, segmented_image = canvas.generate()
-
-        # Converter imagem segmentada para np.uint8
-        segmented_image = (segmented_image * 255).astype(np.uint8)
-        
-        # Converter de BGR para RGB
-        segmented_image = cv2.cvtColor(segmented_image, cv2.COLOR_BGR2RGB)
+        canvas = Canvas(image, nb_color, pixel_size)
+        result, colors, quantified_image = canvas.generate()
 
         st.image(result, caption='Imagem Resultante', use_column_width=True)
-        st.image(segmented_image, caption='Imagem Segmentada', use_column_width=True)
+        st.image(quantified_image, caption='Imagem Segmentada', use_column_width=True)
 
-        # Salvar contorno e paleta
-        result_bytes = cv2.imencode('.jpg', result)[1].tobytes()
-        st.download_button(
-            label="Baixar Contorno",
-            data=result_bytes,
-            file_name='contorno.jpg',
-            mime='image/jpeg')
+        for i, color in enumerate(colors):
+            color_block = np.ones((50, 50, 3), np.uint8) * color[::-1]
+            st.image(color_block, caption=f'Cor {i+1}', width=50)
 
-        palette_bytes = cv2.imencode('.jpg', segmented_image)[1].tobytes()
-        st.download_button(
-            label="Baixar Paleta",
-            data=palette_bytes,
-            file_name='paleta.jpg',
-            mime='image/jpeg')
+            r, g, b = color
+            c, m, y, k = rgb_to_cmyk(r, g, b)
+            c_ml, m_ml, y_ml, k_ml = calculate_ml(c, m, y, k, total_ml)
+
+            color_area = np.count_nonzero(np.all(quantified_image == color, axis=-1))
+            total_area = quantified_image.shape[0] * quantified_image.shape[1]
+            color_percentage = (color_area / total_area) * 100
+
+            st.write(f"Cor {i+1}: {color_percentage:.2f}%")
 

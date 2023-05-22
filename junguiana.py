@@ -136,8 +136,10 @@ if uploaded_file is not None:
         
         for i, color in enumerate(colors):
             color_block_bgr = np.ones((50, 50, 3), np.uint8) * color[::-1]  # Cores em formato BGR
-            color_block_rgb = cv2.cvtColor(color_block_bgr, cv2.COLOR_BGR2RGB)  # Converter de BGR para RGB
+            color_block_float32 = color_block_bgr.astype(np.float32)  # Converter para np.float32
+            color_block_rgb = cv2.cvtColor(color_block_float32, cv2.COLOR_BGR2RGB)  # Converter de BGR para RGB
             st.image(color_block_rgb, caption=f'Cor {i+1}', width=50)
+
 
 
         result_bytes = cv2.imencode('.jpg', result)[1].tobytes()

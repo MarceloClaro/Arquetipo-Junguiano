@@ -425,6 +425,7 @@ cores_junguianas = {
 
     
 # Configurações do aplicativo Streamlit
+
 st.image("clube.png")  # Adiciona a imagem no topo do app
 st.title("Análise de Cor Dominante das Pinturas de Telas")
 st.write("""

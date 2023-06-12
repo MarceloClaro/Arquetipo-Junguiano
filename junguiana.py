@@ -7,28 +7,41 @@ from PIL import Image
 import io
 import base64
 
-def rgb_to_cmyk(r, g, b):
-    if (r == 0) and (g == 0) and (b == 0):
-        return 0, 0, 0, 1
-    c = 1 - r / 255
-    m = 1 - g / 255
-    y = 1 - b / 255
-
-    min_cmy = min(c, m, y)
-    c = (c - min_cmy) / (1 - min_cmy)
-    m = (m - min_cmy) / (1 - min_cmy)
-    y = (y - min_cmy) / (1 - min_cmy)
-    k = min_cmy
-
-    return c, m, y, k
-
-def calculate_ml(c, m, y, k, total_ml):
-    total_ink = c + m + y + k
-    c_ml = (c / total_ink) * total_ml
-    m_ml = (m / total_ink) * total_ml
-    y_ml = (y / total_ink) * total_ml
-    k_ml = (k / total_ink) * total_ml
-    return c_ml, m_ml, y_ml, k_ml
+cores_junguianas = {
+    '1': {
+        'cor': 'Preto',
+        'rgb': (0, 0, 0),
+        'anima_animus': 'A cor preta representa a sombra do inconsciente, simbolizando os aspectos desconhecidos e reprimidos de uma pessoa.',
+        'sombra': 'A cor preta é a própria sombra, representando os instintos primordiais e os aspectos ocultos da personalidade.',
+        'personalidade': 'A cor preta pode indicar uma personalidade enigmática, poderosa e misteriosa.',
+        'diagnostico': 'O uso excessivo da cor preta pode indicar uma tendência à negatividade, depressão ou repressão emocional.'
+    },
+    '2': {
+        'cor': 'Preto carvão',
+        'rgb': (10, 10, 10),
+        'anima_animus': 'O preto carvão simboliza a sombra feminina do inconsciente, representando os aspectos desconhecidos e reprimidos da feminilidade.',
+        'sombra': 'O preto carvão é a própria sombra feminina, representando os instintos primordiais e os aspectos ocultos da feminilidade.',
+        'personalidade': 'A cor preto carvão pode indicar uma personalidade poderosa, misteriosa e enigmática com uma forte presença feminina.',
+        'diagnostico': 'O uso excessivo da cor preto carvão pode indicar uma tendência à negatividade, depressão ou repressão emocional na expressão feminina.'
+    },
+    '3': {
+        'cor': 'Cinza escuro',
+        'rgb': (17, 17, 17),
+        'anima_animus': 'O cinza escuro representa a parte sombria e desconhecida do inconsciente, relacionada aos aspectos reprimidos e negligenciados da personalidade.',
+        'sombra': 'O cinza escuro simboliza a sombra interior, representando a reserva de energia não utilizada e os aspectos ocultos da personalidade.',
+        'personalidade': 'A cor cinza escuro pode indicar uma personalidade reservada, misteriosa e com profundidade interior.',
+        'diagnostico': 'O uso excessivo da cor cinza escuro pode indicar uma tendência a se esconder, reprimir emoções ou evitar o autoconhecimento.'
+    },
+    '4': {
+        'cor': 'Cinza ardósia',
+        'rgb': (47, 79, 79),
+        'anima_animus': 'O cinza ardósia representa a sombra feminina do inconsciente, relacionada aos aspectos reprimidos e negligenciados da feminilidade.',
+        'sombra': 'O cinza ardósia é a própria sombra feminina, representando a reserva de energia não utilizada e os aspectos ocultos da feminilidade.',
+        'personalidade': 'A cor cinza ardósia pode indicar uma personalidade reservada, misteriosa e com uma forte presença feminina.',
+        'diagnostico': 'O uso excessivo da cor cinza ardósia pode indicar uma tendência a se esconder, reprimir emoções ou evitar o autoconhecimento na expressão feminina.'
+    },
+    # E assim por diante até a cor 100
+}
 
 class Canvas:
     def __init__(self, src, nb_color, pixel_size=4000):
@@ -90,89 +103,102 @@ class Canvas:
         out = vfunc(np.arange(width * height))
         return np.resize(out, (width, height, codebook.shape[1]))
 
-st.image("clube.png")
-st.title('Gerador de Paleta de Cores para Pintura por Números')
-st.subheader("Sketching and concept development")
-st.subheader("""
-Autor: Marcelo Claro
+def rgb_to_cmyk(r, g, b):
+    if (r == 0) and (g == 0) and (b == 0):
+        return 0, 0, 0, 1
+    c = 1 - r / 255
+    m = 1 - g / 255
+    y = 1 - b / 255
 
-https://orcid.org/0000-0001-8996-2887
+    min_cmy = min(c, m, y)
+    c = (c - min_cmy) / (1 - min_cmy)
+    m = (m - min_cmy) / (1 - min_cmy)
+    y = (y - min_cmy) / (1 - min_cmy)
+    k = min_cmy
 
-marceloclaro@geomaker.org
+    return c, m, y, k
 
-Whatsapp:(88)98158-7145 (https://www.geomaker.org/)
-""")
+def calculate_ml(c, m, y, k, total_ml):
+    total_ink = c + m + y + k
+    c_ml = (c / total_ink) * total_ml
+    m_ml = (m / total_ink) * total_ml
+    y_ml = (y / total_ink) * total_ml
+    k_ml = (k / total_ink) * total_ml
+    return c_ml, m_ml, y_ml, k_ml
 
-uploaded_file = st.file_uploader("Escolha uma imagem", type=["jpg", "png"])
-st.write("""
-Apresento a vocês um aplicativo chamado "Gerador de Paleta de Cores para Pintura por Números".
-""")
-if uploaded_file is not None:
-    file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-    image = cv2.imdecode(file_bytes, 1)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    st.image(image, caption='Imagem Carregada', use_column_width=True)
+def buscar_cor_proxima(rgb, cores_junguianas):
+    distancias = []
+    for cor_junguiana in cores_junguianas.values():
+        cor_junguiana_rgb = cor_junguiana['rgb']
+        distancia = np.sqrt(np.sum((np.array(rgb) - np.array(cor_junguiana_rgb)) ** 2))
+        distancias.append(distancia)
+    cor_proxima_index = np.argmin(distancias)
+    return cores_junguianas[str(cor_proxima_index + 1)]
 
-    nb_color = st.slider('Escolha o número de cores para pintar', min_value=1, max_value=80, value=2, step=1)
-    total_ml = st.slider('Escolha o total em ml da tinta de cada cor', min_value=1, max_value=1000, value=10, step=1)
-    pixel_size = st.slider('Escolha o tamanho do pixel da pintura', min_value=500, max_value=8000, value=4000, step=100)
+def main():
+    st.image("clube.png")
+    st.title('Gerador de Paleta de Cores para Pintura por Números')
+    st.subheader("Sketching and concept development")
+    st.subheader("""
+    Autor: Marcelo Claro
 
-    if st.button('Gerar'):
-        pil_image = Image.open(io.BytesIO(file_bytes))
-        if 'dpi' in pil_image.info:
-            dpi = pil_image.info['dpi']
-            st.write(f'Resolução da imagem: {dpi} DPI')
+    https://orcid.org/0000-0001-8996-2887
 
-            cm_per_inch = pixel_size
-            cm_per_pixel = cm_per_inch / dpi[0]
-            st.write(f'Tamanho de cada pixel: {cm_per_pixel:.4f} centímetros')
+    marceloclaro@geomaker.org
 
-        canvas = Canvas(image, nb_color, pixel_size)
-        result, colors, segmented_image = canvas.generate()
+    Whatsapp:(88)98158-7145 (https://www.geomaker.org/)
+    """)
 
-        segmented_image = (segmented_image * 255).astype(np.uint8)
-        segmented_image = cv2.cvtColor(segmented_image, cv2.COLOR_BGR2RGB)
+    uploaded_file = st.file_uploader("Escolha uma imagem", type=["jpg", "png"])
+    st.write("""
+    Apresento a vocês um aplicativo chamado "Gerador de Paleta de Cores para Pintura por Números". Esse aplicativo foi desenvolvido pelo artista plástico Marcelo Claro Laranjeira, conhecido pelo pseudônimo Marcelo Claro. Marcelo é professor de geografia na cidade de Crateús, Ceará, e também é um artista plástico autodidata.
+    Este aplicativo é uma ferramenta útil para artistas plásticos, pois oferece recursos para gerar paletas de cores, criar pinturas por números, desenvolver esboços e conceitos, e explorar diferentes combinações de cores.
+    Como funciona? Primeiro, você pode fazer o upload de uma imagem de referência, que pode ser uma foto, ilustração ou qualquer imagem que você deseje usar como base. Em seguida, o aplicativo utiliza o algoritmo K-means para quantificar as cores presentes na imagem. Você pode controlar o número de cores desejado através de um controle deslizante, permitindo extrair a quantidade adequada de cores para sua pintura.
+    Uma vez gerada a paleta de cores, o aplicativo exibe a imagem resultante, onde cada região da imagem original é substituída pela cor correspondente da paleta. Isso permite que você visualize como sua pintura ficaria usando essas cores específicas. Além disso, o aplicativo também exibe a imagem segmentada, onde cada região da imagem original é preenchida com uma cor sólida correspondente à cor dominante da região. Isso ajuda na identificação de áreas de destaque e contrastes na imagem, facilitando o processo de esboço e desenvolvimento de conceitos.
+    Uma característica interessante do aplicativo é a possibilidade de definir o total em mililitros de tinta antes de gerar a paleta de cores. Isso permite que você obtenha doses precisas de cada cor primária para alcançar tons exatos em suas paletas.
+    No processo criativo de Marcelo Claro, ele utiliza o aplicativo como uma ferramenta complementar para sua análise da paisagem humana. Ele reúne imagens, fotos e referências como inspiração e, em seguida, faz esboços e desenvolve conceitos usando a técnica de "Sketching and concept development". Ele explora diferentes ideias, experimenta composições e cores, e utiliza as paletas de cores geradas pelo aplicativo para criar suas pinturas finais.
+    O trabalho de Marcelo Claro tem como conceito central "Retratando a paisagem humana: a intersecção entre a arte e a geografia". Ele busca retratar a beleza nas coisas simples e cotidianas, explorando como a paisagem humana afeta nossa vida e como nós a modificamos. Sua abordagem geográfica e estética se complementam, permitindo uma análise mais profunda da paisagem e sua relação com nossa existência.
+    Em resumo, o aplicativo "Gerador de Paleta de Cores para Pintura por Números" é uma ferramenta valiosa para artistas plásticos, oferecendo recursos para criar paletas de cores, desenvolver conceitos e explorar diferentes combinações de cores. Ele auxilia no processo criativo, permitindo visualizar e experimentar as cores antes mesmo de começar a pintar. É uma ferramenta inovadora que combina arte, tecnologia e geografia, permitindo uma análise mais profunda da paisagem humana e sua relação com nossa existência.
+    """)
 
-        st.image(result, caption='Imagem Resultante', use_column_width=True)
-        st.image(segmented_image, caption='Imagem Segmentada', use_column_width=True)
+    if uploaded_file is not None:
+        file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
+        image = cv2.imdecode(file_bytes, 1)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        st.image(image, caption='Imagem Carregada', use_column_width=True)
 
-        for i, color in enumerate(colors):
-            color_block_bgr = np.ones((50, 50, 3), np.uint8) * color[::-1]  # Cores no formato BGR
-            color_block_bgr = color_block_bgr.astype(np.float32) / 255.0  # Normalizar para valores entre 0 e 1
-            color_block_rgb = cv2.cvtColor(color_block_bgr, cv2.COLOR_BGR2RGB)  # Converter de BGR para RGB
-            st.image(color_block_rgb, caption=f'Cor {i+1}', width=50)
+        nb_color = st.slider('Escolha o número de cores para pintar', min_value=1, max_value=80, value=2, step=1)
+        total_ml = st.slider('Escolha o total em ml da tinta de cada cor', min_value=1, max_value=1000, value=10, step=1)
+        pixel_size = st.slider('Escolha o tamanho do pixel da pintura', min_value=500, max_value=8000, value=4000, step=100)
 
-            r, g, b = color * 255.0  # Converter de volta para o intervalo entre 0 e 255
-            c, m, y, k = rgb_to_cmyk(r, g, b)
-            c_ml, m_ml, y_ml, k_ml = calculate_ml(c, m, y, k, total_ml)
+        if st.button('Gerar'):
+            pil_image = Image.open(io.BytesIO(file_bytes))
+            if 'dpi' in pil_image.info:
+                dpi = pil_image.info['dpi']
+            else:
+                dpi = (300, 300)
+            c = Canvas(image, nb_color, pixel_size)
+            canvas, colors, quantified_image = c.generate()
+            st.image(canvas, caption='Pintura por números', use_column_width=True)
+            st.image(quantified_image, caption='Imagem segmentada', use_column_width=True)
 
-            color_area = np.count_nonzero(np.all(segmented_image == color, axis=-1))
-            total_area = segmented_image.shape[0] * segmented_image.shape[1]
-            color_percentage = (color_area / total_area) * 100
+            st.subheader('Cores da paleta gerada:')
+            for i, color in enumerate(colors):
+                color_block = np.ones((50, 50, 3), np.uint8) * color[::-1]  # Cores em formato BGR
+                st.image(color_block, caption=f'Cor {i+1}', width=50)
 
-            st.subheader("Sketching and concept development da paleta de cor")
-            st.write(f"""
-            PALETAS DE COR PARA: {total_ml:.2f} ml.
+                st.write(f"Cor {i+1}: RGB: {color}")
+                c_ml, m_ml, y_ml, k_ml = calculate_ml(*rgb_to_cmyk(*color), total_ml)
+                st.write(f"      CMYK: {c_ml:.2f}, {m_ml:.2f}, {y_ml:.2f}, {k_ml:.2f}")
+                cor_proxima = buscar_cor_proxima(color, cores_junguianas)
+                st.write(f"      Cor Junguiana Mais Próxima: {cor_proxima['cor']}")
+                st.write(f"      Anima/Animus: {cor_proxima['anima_animus']}")
+                st.write(f"      Sombra: {cor_proxima['sombra']}")
+                st.write(f"      Personalidade: {cor_proxima['personalidade']}")
+                st.write(f"      Diagnóstico: {cor_proxima['diagnostico']}")
 
-            A cor pode ser alcançada pela combinação das cores primárias do modelo CMYK, utilizando a seguinte dosagem:
+    else:
+        st.write('Por favor, faça o upload de uma imagem')
 
-            Ciano (Azul) (C): {c_ml:.2f} ml
-            Magenta (Vermelho) (M): {m_ml:.2f} ml
-            Amarelo (Y): {y_ml:.2f} ml
-            Preto (K): {k_ml:.2f} ml                
-            """)
-
-        result_bytes = cv2.imencode('.jpg', result)[1].tobytes()
-        st.download_button(
-            label="Baixar imagem resultante",
-            data=result_bytes,
-            file_name='result.jpg',
-            mime='image/jpeg')
-
-        segmented_image_bytes = cv2.imencode('.jpg', segmented_image)[1].tobytes()
-        st.download_button(
-            label="Baixar imagem segmentada",
-            data=segmented_image_bytes,
-            file_name='segmented.jpg',
-            mime='image/jpeg')
-
+if __name__ == "__main__":
+    main()
